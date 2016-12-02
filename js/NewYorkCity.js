@@ -30,19 +30,39 @@ var NewYorkCity = function() {
                 text: 'New York',
                 verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
                 eyeOffset: new Cesium.Cartesian3(0,0,-30),
+                scale   :   5
             }
         });
     }
 
     main.flyTo = function() {
         viewer.trackedEntity = main.center_Entity;
-        viewer.camera.flyTo({
-            destination : Cesium.Cartesian3.fromDegrees(main.city_pos.x, main.city_pos.y, 2000.0),
+        viewer.camera.flyToBoundingSphere(
+            new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(main.city_pos.x, main.city_pos.y, 1000.0), 500),
+            {
             complete: function () {
                 isNewYork = true;
                 isBaverlyHill = false;
             },
             maximumHeight: 10000000,
+            orientation : {
+                heading: Cesium.Math.toRadians(-60),
+                pitch: Cesium.Math.toRadians(-25.0),
+                roll: 0.0
+            }
         });
+        // viewer.camera.flyTo({
+        //     destination : Cesium.Cartesian3.fromDegrees(main.city_pos.x + 200 / 10000, main.city_pos.y - 100 / 10000, 1000.0),
+        //     complete: function () {
+        //         isNewYork = true;
+        //         isBaverlyHill = false;
+        //     },
+        //     maximumHeight: 10000000,
+        //     orientation : {
+        //         heading: Cesium.Math.toRadians(-60),
+        //         pitch: Cesium.Math.toRadians(-25.0),
+        //         roll: 0.0
+        //     }
+        // });
     }
 }

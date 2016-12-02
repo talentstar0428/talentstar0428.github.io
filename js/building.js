@@ -85,6 +85,7 @@ var Building = function()
         if (main.index == 1) heading = main.direction;
 
         viewer.trackedEntity = main.entrance;
+
         viewer.camera.flyTo({
             destination : main.entrance_path_pos,
             orientation : {

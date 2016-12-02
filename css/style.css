@@ -50,35 +50,54 @@ body
 	overflow: hidden;
 }
 
-#New_York {
-	position: absolute;
-	top: 60px;
-	left: 6px;
-	z-index: 99;
-	color:black;
-	width:80px;
-	background-color: white;
-}
 
-#Home {
+#home_area
+{
 	position: absolute;
-	bottom: 0px;
-	left: 50%;
+	bottom: 10px;
+	left: calc(50% - 25px);
 	z-index: 99;
 	color:black;
 	width: 50px;
 	height: 50px;
-	background-color: transparent;
+	background-color: rgba(0, 0, 0, 0.5);
+	border-radius: 30px;
+	padding: 5px;
+	cursor: pointer;
+	box-shadow: 0px 0px 10px white;
 }
 
-#BeverlyHill {
+#home_area img
+{
+	width : 100%;
+}
+
+#top_btn_area
+{
+	width 	: 190px;
 	position: absolute;
-	top: 90px;
-	left: 6px;
 	z-index: 99;
-	color:black;
-	width:100px;
-	background-color: white;
+	top 	: 50px;
+	left 	: calc(50% - 95px);
+}
+
+.abs_btn
+{
+	background 	: rgba(0, 0, 0, 0.75);
+	width: 90px;
+	/*height: 25px;*/
+	color: white;
+	box-shadow: 0px 0px 10px white;
+	line-height: 25px;
+	border: 1px solid white;
+	font-family: arial;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+.abs_btn:first-child
+{
+	margin-right: 5px;
 }
 
 #buttonContainer {

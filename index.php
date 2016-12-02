@@ -47,9 +47,16 @@
                 <label>Latitude: </label><span id="latitude">0</span>
             </div>
         </div>
-        <button id="New_York" onclick="gotoNewYork()">New York</button>
-        <button id="BeverlyHill" onclick="gotoBeverlyHill()">Beverly Hills</button>
-        <img src="./images/home.png" id="Home" alt="Home" onclick="gotoHome()" />
+
+        <div id="top_btn_area">
+            <button id="New_York" class="abs_btn" onclick="gotoNewYork()">New York</button>
+            <button id="BeverlyHill" class="abs_btn" onclick="gotoBeverlyHill()">Beverly Hills</button>
+        </div>
+
+        <div id="home_area">
+            <img src="./images/home.png" id="Home" alt="Home" onclick="gotoHome()" />
+        </div>
+
         <div id="cesiumContainer"></div>
     </div>
 </div>
@@ -97,8 +104,11 @@
         var y = event.gamma;
 
         if (this.mousedown == false) {
+
             viewer.camera.rotateLeft(y / 1000);
-            viewer.camera.rotateUp(x / 1000);
+//            viewer.camera.rotateUp(x / 1000);
+//            viewer.camera.rotateLeft(y / 1000);
+//            viewer.camera.rotateUp(x / 1000);
         }
 
     }
@@ -135,14 +145,33 @@
     function gotoHome() {
         if (isNewYork || isBaverlyHill) {
             viewer.trackedEntity = man;
-            viewer.camera.flyTo({
-                destination : Cesium.Cartesian3.fromDegrees(current_pos.coords.longitude, current_pos.coords.latitude, 2000.0),
-                complete: function () {
-                    isBaverlyHill = false;
-                    isNewYork = false;
-                },
-                maximumHeight: 10000000,
-            });
+            viewer.scene.camera.flyToBoundingSphere(
+                new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(current_pos.coords.longitude, current_pos.coords.latitude, 1000.0), 500),
+                {
+                    maximumHeight: 10000000,
+                    complete: function () {
+                        isBaverlyHill = false;
+                        isNewYork = false;
+                    },
+                    orientation : {
+                        heading: Cesium.Math.toRadians(-60),
+                        pitch: Cesium.Math.toRadians(-25.0),
+                        roll: 0.0
+                    }
+                });
+//            viewer.camera.flyTo({
+//                destination : Cesium.Cartesian3.fromDegrees(current_pos.coords.longitude + 200 / 10000, current_pos.coords.latitude - 100 / 10000, 1000.0),
+//                complete: function () {
+//                    isBaverlyHill = false;
+//                    isNewYork = false;
+//                },
+//                maximumHeight: 10000000,
+//                orientation : {
+//                    heading: Cesium.Math.toRadians(-60),
+//                    pitch: Cesium.Math.toRadians(-25.0),
+//                    roll: 0.0
+//                }
+//            });
         }
     }
 
@@ -166,32 +195,19 @@
 
         viewer.dataSources.add(source);
 
-        var entity = source.entities.add({
-            position : Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude),
-            ellipse : {
-                semiMajorAxis : 10.0,
-                semiMinorAxis : 10.0,
-                material : Cesium.Color.TRANSPARENT
-            },
-            label : {
-                text: 'You are here',
-                verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-                eyeOffset: new Cesium.Cartesian3(0,0,-30),
-                show: false
-            }
-        });
-
-        var id = 'man';
         man = new Cesium.Entity({
-            position : Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude, 0),
-            id: id,
-            model: {
-                uri: './obj/Cesium_Man.glb',
-                scale : 5.0
+            position : Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude),
+            id: 'man',
+            ellipse : {
+                semiMajorAxis : 700.0,
+                semiMinorAxis : 700.0,
+                material : Cesium.Color.TRANSPARENT,
             },
         });
 
         source.entities.add(man);
+
+        viewer.trackedEntity = man;
 
         var street = new StreetView();
         street.init(viewer, source);
@@ -216,17 +232,29 @@
 
         this.viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
-        function showLabel() {
-            entity.label.show = true;
+        function initEventOrientation() {
             window.addEventListener("deviceorientation", handleOrientation);
         }
-
-        viewer.trackedEntity = man;
-
-        viewer.scene.camera.flyTo({
-            destination : Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude, 2000.0),
-            complete: showLabel,
+        viewer.scene.camera.flyToBoundingSphere(
+            new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude, 1000.0), 500),
+            {
+            complete: initEventOrientation,
+            orientation : {
+                heading: Cesium.Math.toRadians(-60),
+                pitch: Cesium.Math.toRadians(-25.0),
+                roll: 0.0
+            }
         });
+
+//        viewer.scene.camera.flyTo({
+//            destination : Cesium.Cartesian3.fromDegrees(position.coords.longitude  + 200 / 10000, position.coords.latitude - 100 / 10000, 1000.0),
+//            complete: initEventOrientation,
+//            orientation : {
+//                heading: Cesium.Math.toRadians(-60),
+//                pitch: Cesium.Math.toRadians(-25.0),
+//                roll: 0.0
+//            }
+//        });
     }
 
 
