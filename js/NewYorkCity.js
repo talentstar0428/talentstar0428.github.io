@@ -41,6 +41,8 @@ var NewYorkCity = function() {
             new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(main.city_pos.x, main.city_pos.y, 1000.0), 500),
             {
             complete: function () {
+                newyork.center_Entity.show = true;
+                baverlyHill.center_Entity.show = false;
                 isNewYork = true;
                 isBaverlyHill = false;
             },

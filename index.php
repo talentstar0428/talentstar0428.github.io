@@ -150,6 +150,8 @@
                 {
                     maximumHeight: 10000000,
                     complete: function () {
+                        newyork.center_Entity.show = false;
+                        baverlyHill.center_Entity.show = false;
                         isBaverlyHill = false;
                         isNewYork = false;
                     },
@@ -227,6 +229,10 @@
         baverlyHill.init(source, {x:-118.4014733, y:34.073742});
 
         baverlyHill.drawPos();
+
+        newyork.center_Entity.show = false;
+        baverlyHill.center_Entity.show = false;
+
 
 //        street.initEvent();
 
