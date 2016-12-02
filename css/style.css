@@ -1,0 +1,149 @@
+.site-index .panorama{
+    height: 600px;
+}
+
+body
+{
+	overflow: hidden;
+	margin : 0px;
+	padding: 0px;
+}
+
+#img_loading
+{
+	position: absolute;
+	z-index: 999;
+	top : 300px;
+	left : calc(50% - 50px);
+	opacity: 0.5;
+}
+
+#popup
+{
+	position: absolute;
+	width: 250px;
+	height: 90px;
+	line-height: 30px;
+	border: 1px solid gray;
+	padding: 2px;
+	box-shadow: 0px 0px 10px gray;
+	background-color: rgba(255, 255, 255, 0.75);
+	display: none;
+}
+
+#preview {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+#previewContent {
+	position: absolute;
+	top: 0px;
+	bottom: 0;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+#New_York {
+	position: absolute;
+	top: 60px;
+	left: 6px;
+	z-index: 99;
+	color:black;
+	width:80px;
+	background-color: white;
+}
+
+#Home {
+	position: absolute;
+	bottom: 0px;
+	left: 50%;
+	z-index: 99;
+	color:black;
+	width: 50px;
+	height: 50px;
+	background-color: transparent;
+}
+
+#BeverlyHill {
+	position: absolute;
+	top: 90px;
+	left: 6px;
+	z-index: 99;
+	color:black;
+	width:100px;
+	background-color: white;
+}
+
+#buttonContainer {
+	position: absolute;
+	top: 5px;
+	left: 6px;
+	z-index: 99;
+}
+
+#cesiumContainer {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+#altContainer {
+	background-color: rgba(0, 0, 0, 0.2);
+	color: white;
+	padding: 0 2px;
+}
+
+#altContainer label {
+	line-height: 1em;
+}
+
+#previewContent:-webkit-full-screen {
+	top: 0;
+}
+
+#previewContent:-ms-fullscreen {
+	top: 0;
+}
+
+#previewContent:-moz-full-screen {
+	top: 0;
+}
+
+#previewContent:fullscreen {
+	top: 0;
+}
+
+#location
+{
+	position: absolute;
+	width: 120px;
+	height: 90px;
+	line-height: 30px;
+	border: 1px solid gray;
+	padding: 2px;
+	box-shadow: 0px 0px 10px gray;
+	background-color: rgba(255, 255, 255, 0.75);
+
+}
+
+#output
+{
+	display: none;
+}
+
+#btn_view
+{
+	position: absolute;
+	width: 200px;
+	height: 35px;
+	left: calc(50% - 100px);
+	top : 100px;
+}
