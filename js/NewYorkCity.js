@@ -31,7 +31,8 @@ var NewYorkCity = function() {
                 verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
                 eyeOffset: new Cesium.Cartesian3(0,0,-30),
                 scale   :   5
-            }
+            },
+            show : false
         });
     }
 
@@ -41,7 +42,7 @@ var NewYorkCity = function() {
             new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(main.city_pos.x, main.city_pos.y, 1000.0), 500),
             {
             complete: function () {
-                newyork.center_Entity.show = true;
+                newyork.center_Entity.show = false;
                 baverlyHill.center_Entity.show = false;
                 isNewYork = true;
                 isBaverlyHill = false;

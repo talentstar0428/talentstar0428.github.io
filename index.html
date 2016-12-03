@@ -28,13 +28,13 @@
     <script src="js/building.js"></script>
     <script src="js/NewYorkCity.js"></script>
     <script src="js/BaverlyHill.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/style.css" />
     <style>
         @import url(js/Cesium/Widgets/widgets.css);
         html, body, #cesiumContainer {
             width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
         }
     </style>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
 <body>
 
@@ -84,6 +84,7 @@
             fileExtension: 'png'
         }),
         infoBox : false,
+        sceneModePicker : false,
 
     });
 
@@ -222,11 +223,11 @@
 
         street.enableCameraMoveEventHandler(viewer);
 
-        newyork.init(source, {x:-95.71, y:37.09});
+        newyork.init(source, {x:    -73.985130, y:  40.758896});
 
         newyork.drawPos();
 
-        baverlyHill.init(source, {x:-118.4014733, y:34.073742});
+        baverlyHill.init(source, {x:  -118.3994444, y:   34.0736111});
 
         baverlyHill.drawPos();
 

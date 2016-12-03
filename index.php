@@ -28,13 +28,13 @@
     <script src="js/building.js"></script>
     <script src="js/NewYorkCity.js"></script>
     <script src="js/BaverlyHill.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/style.css" />
     <style>
         @import url(js/Cesium/Widgets/widgets.css);
         html, body, #cesiumContainer {
             width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
         }
     </style>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
 <body>
 
@@ -84,6 +84,7 @@
             fileExtension: 'png'
         }),
         infoBox : false,
+        sceneModePicker : false,
 
     });
 
@@ -146,21 +147,21 @@
         if (isNewYork || isBaverlyHill) {
             viewer.trackedEntity = man;
             viewer.scene.camera.flyToBoundingSphere(
-                new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(current_pos.coords.longitude, current_pos.coords.latitude, 1000.0), 500),
-                {
-                    maximumHeight: 10000000,
-                    complete: function () {
-                        newyork.center_Entity.show = false;
-                        baverlyHill.center_Entity.show = false;
-                        isBaverlyHill = false;
-                        isNewYork = false;
-                    },
-                    orientation : {
-                        heading: Cesium.Math.toRadians(-60),
-                        pitch: Cesium.Math.toRadians(-25.0),
-                        roll: 0.0
-                    }
-                });
+                    new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(current_pos.coords.longitude, current_pos.coords.latitude, 1000.0), 500),
+                    {
+                        maximumHeight: 10000000,
+                        complete: function () {
+                            newyork.center_Entity.show = false;
+                            baverlyHill.center_Entity.show = false;
+                            isBaverlyHill = false;
+                            isNewYork = false;
+                        },
+                        orientation : {
+                            heading: Cesium.Math.toRadians(-60),
+                            pitch: Cesium.Math.toRadians(-25.0),
+                            roll: 0.0
+                        }
+                    });
 //            viewer.camera.flyTo({
 //                destination : Cesium.Cartesian3.fromDegrees(current_pos.coords.longitude + 200 / 10000, current_pos.coords.latitude - 100 / 10000, 1000.0),
 //                complete: function () {
@@ -222,11 +223,11 @@
 
         street.enableCameraMoveEventHandler(viewer);
 
-        newyork.init(source, {x:-95.71, y:37.09});
+        newyork.init(source, {x:    -73.985130, y:  40.758896});
 
         newyork.drawPos();
 
-        baverlyHill.init(source, {x:-118.4014733, y:34.073742});
+        baverlyHill.init(source, {x:  -118.3994444, y:   34.0736111});
 
         baverlyHill.drawPos();
 
@@ -242,15 +243,15 @@
             window.addEventListener("deviceorientation", handleOrientation);
         }
         viewer.scene.camera.flyToBoundingSphere(
-            new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude, 1000.0), 500),
-            {
-            complete: initEventOrientation,
-            orientation : {
-                heading: Cesium.Math.toRadians(-60),
-                pitch: Cesium.Math.toRadians(-25.0),
-                roll: 0.0
-            }
-        });
+                new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude, 1000.0), 500),
+                {
+                    complete: initEventOrientation,
+                    orientation : {
+                        heading: Cesium.Math.toRadians(-60),
+                        pitch: Cesium.Math.toRadians(-25.0),
+                        roll: 0.0
+                    }
+                });
 
 //        viewer.scene.camera.flyTo({
 //            destination : Cesium.Cartesian3.fromDegrees(position.coords.longitude  + 200 / 10000, position.coords.latitude - 100 / 10000, 1000.0),

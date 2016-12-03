@@ -32,7 +32,8 @@ var BaverlyHill = function() {
                 eyeOffset: new Cesium.Cartesian3(0,0,-30),
                 scale   :   5
 
-            }
+            }, 
+            show : false
         });
     }
 
@@ -43,7 +44,7 @@ var BaverlyHill = function() {
             {
                 complete: function () {
                     newyork.center_Entity.show = false;
-                    baverlyHill.center_Entity.show = true;
+                    baverlyHill.center_Entity.show = false;
                     isBaverlyHill = true;
                     isNewYork = false;
                 },
