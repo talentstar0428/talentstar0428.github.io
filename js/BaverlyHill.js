@@ -21,11 +21,11 @@ var BaverlyHill = function() {
             //     uri: './3dobject/BeverlyHills/BeverlyHills.gltf',
             //     scale:1
             // },
-            ellipse : {
-                semiMajorAxis : 10.0,
-                semiMinorAxis : 10.0,
-                material : Cesium.Color.TRANSPARENT
-            },
+            // ellipse : {
+            //     semiMajorAxis : 10.0,
+            //     semiMinorAxis : 10.0,
+            //     material : Cesium.Color.TRANSPARENT
+            // },
             label : {
                 text: 'Baverly Hills',
                 verticalOrigin: Cesium.VerticalOrigin.BOTTOM,

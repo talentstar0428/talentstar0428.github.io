@@ -21,11 +21,11 @@ var NewYorkCity = function() {
             //     uri: './3dobject/BeverlyHills/BeverlyHills.gltf',
             //     scale:1
             // },
-            ellipse : {
-                semiMajorAxis : 10.0,
-                semiMinorAxis : 10.0,
-                material : Cesium.Color.TRANSPARENT
-            },
+            // ellipse : {
+            //     semiMajorAxis : 10.0,
+            //     semiMinorAxis : 10.0,
+            //     material : Cesium.Color.TRANSPARENT
+            // },
             label : {
                 text: 'New York',
                 verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
