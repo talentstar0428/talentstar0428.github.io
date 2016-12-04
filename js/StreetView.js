@@ -27,6 +27,12 @@ var StreetView = function()
             var x = main.long + Math.cos(Cesium.Math.toRadians(360 * i / main.count)) * Math.random() / 70;
             var y = main.lat +  Math.sin(Cesium.Math.toRadians(360 * i / main.count)) * Math.random() / 70;
 
+            if (i > 0 && !main.distance(i, {x:x, y:y})) 
+            {
+                i --;
+                continue;
+            }
+
             var building = new Building();
             building.init(main.scene, main.dataSource);
             building.setPosition({x:x, y:y});
@@ -37,13 +43,24 @@ var StreetView = function()
             building.setBuilding(number, id);
 
             id = "image_" + i;
-            building.setImage(number, id);
+            building.setImage(number, id, i);
 
             building.draw();
 
             main.buildings.push(building);
 
         }
+    }
+
+    main.distance = function (count, position) 
+    {
+        for (var i = 0; i < count; i ++) {
+            var distance = Math.sqrt((position.x - main.buildings[i].pos.x) * (position.x - main.buildings[i].pos.x) +
+                (position.y - main.buildings[i].pos.y) * (position.y - main.buildings[i].pos.y));
+            console.log(distance);
+            if (distance < 0.002) return false;
+        }
+        return true;
     }
 
     main.setLatLon = function (long, lat) {
@@ -69,6 +86,7 @@ var StreetView = function()
                 }
                 else if (pickedObject.id === building.building) {
                     if (main.selectBuilding != i) {
+                        main.moveSelectBuildingOrigin();
                         building.gotoEntrance();
                     }
                     main.selectBuilding = i;
@@ -103,9 +121,17 @@ var StreetView = function()
     }
 
     main.onDocumentMouseClick = function (event) {
+        console.log("click");
         var position = viewer.camera.pickEllipsoid({x:event.clientX, y:event.clientY});
         var cartographicPosition = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
-        // console.log(Cesium.Math.toDegrees(cartographicPosition.longitude) - main.buildings[main.selectBuilding].pos.x);
-        // console.log(Cesium.Math.toDegrees(cartographicPosition.latitude) - main.buildings[main.selectBuilding].pos.y);
+        console.log(Cesium.Math.toDegrees(cartographicPosition.longitude) - main.buildings[main.selectBuilding].pos.x);
+        console.log(Cesium.Math.toDegrees(cartographicPosition.latitude) - main.buildings[main.selectBuilding].pos.y);
+    }
+
+    main.moveSelectBuildingOrigin = function ()
+    {
+        if (main.selectBuilding != -1) {
+            main.buildings[main.selectBuilding].imageMoveOriginal();
+        }
     }
 }

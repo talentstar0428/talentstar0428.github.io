@@ -34,16 +34,28 @@ var Building = function()
     ];
 
     main.entrance_pos_array_x = [
-        0.000031203612437025185,
-        0.000014541667624712318,
-        -0.000008614274207729977,
+        0.00030431056424617965 / 9,
+        0.000148711148185043385 / 9,
+        -0.00004707060763564641 / 9,
     ];
 
     main.entrance_pos_array_y = [
-        0.000048220073750826487,
-        -0.00006320785134050766,
-        0.000004138009423115818,
+        -0.0007382109912050793 / 9,
+        -0.0008567573994788802 / 9,
+        -0.0008671437243563673 / 9,
     ];
+
+    // main.entrance_pos_array_x = [
+    //     0.000031203612437025185,
+    //     0.000014541667624712318,
+    //     -0.000008614274207729977,
+    // ];
+
+    // main.entrance_pos_array_y = [
+    //     0.000048220073750826487,
+    //     -0.00006320785134050766,
+    //     0.000004138009423115818,
+    // ];
 
     main.uri_obj = [
         './3dobject/house1/exterior-p0b.gltf',
@@ -65,6 +77,8 @@ var Building = function()
 
     main.index = 0;
 
+    main.image_position = null;
+
     main.init = function (scene, dataSource) {
         main.scene = viewer.scene;
         main.dataSource = dataSource;
@@ -78,7 +92,7 @@ var Building = function()
         main.height = height;
     }
 
-    main.scale = 3;
+    main.scale = 2;
 
     main.gotoEntrance = function () {
         var heading = main.direction;
@@ -95,6 +109,8 @@ var Building = function()
             },
             maximumHeight: 1000,
             complete: function() {
+                console.log("move image");
+                main.image.position = main.entrance_pos;
                 /*
                 viewer.trackedEntity = main.entrance;
                 viewer.camera.flyTo({
@@ -139,7 +155,7 @@ var Building = function()
         dx1 = dx;
         dy1 = dy;
 
-        var position = Cesium.Cartesian3.fromDegrees(main.pos.x + dx1, main.pos.y + dy1, 7);
+        var position = Cesium.Cartesian3.fromDegrees(main.pos.x + dx1, main.pos.y + dy1, 3 * main.scale);
         main.entrance_pos = position;
         main.entrance_height = 2;
         main.entrance = new Cesium.Entity({
@@ -161,7 +177,7 @@ var Building = function()
         dx1 = dx;
         dy1 = dy;
 
-        var position = Cesium.Cartesian3.fromDegrees(main.pos.x + dx1, main.pos.y + dy1, 7);
+        var position = Cesium.Cartesian3.fromDegrees(main.pos.x + dx1, main.pos.y + dy1, 3 * main.scale);
         main.entrance_path_pos = position;
         main.entrance_path = new Cesium.Entity({
             position: position,
@@ -174,12 +190,11 @@ var Building = function()
             }
         });
         main.index = number;
-        main.height = main.heightArray[number];
+        main.height = main.heightArray[number] / 3 * main.scale;
     }
 
-    main.setImage = function(number, id) {
-        var index = Math.floor(Math.random() * 11) % 3;
-        var name = "./images/photo_" + index + ".png";
+    main.setImage = function(number, id, photo_id) {
+        var name = "./images/photo_" + photo_id + ".png";
 
         var dx = 0.00005;
         var dy = 0.00005;
@@ -196,7 +211,7 @@ var Building = function()
         var dx1 = Math.cos(- Cesium.Math.toRadians(main.direction) + Math.atan(dy / dx)) * length
 
         var position = Cesium.Cartesian3.fromDegrees(main.pos.x + dx1, main.pos.y + dy1, main.height);
-
+        main.image_position = position;
         var entity = new Cesium.Entity( {
             position : position,
             id:id,
@@ -214,6 +229,10 @@ var Building = function()
         main.dataSource.entities.add(main.building);
         main.dataSource.entities.add(main.image);
         main.dataSource.entities.add(main.entrance);
+    }
+
+    main.imageMoveOriginal = function() {
+        main.image.position = main.image_position;
     }
 
 }

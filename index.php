@@ -98,6 +98,8 @@
 
     var baverlyHill = new BaverlyHill();
 
+    var street;
+
     function handleOrientation(event) {
 
         var z = event.alpha;
@@ -133,12 +135,14 @@
 //        return;
 
         if (isNewYork == false) {
+            street.moveSelectBuildingOrigin();
             newyork.flyTo();
         }
     }
 
     function gotoBeverlyHill() {
         if (isBaverlyHill == false) {
+            street.moveSelectBuildingOrigin();
             baverlyHill.flyTo();
         }
     }
@@ -146,22 +150,23 @@
     function gotoHome() {
         if (isNewYork || isBaverlyHill) {
             viewer.trackedEntity = man;
+            street.moveSelectBuildingOrigin();
             viewer.scene.camera.flyToBoundingSphere(
-                    new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(current_pos.coords.longitude, current_pos.coords.latitude, 1000.0), 500),
-                    {
-                        maximumHeight: 10000000,
-                        complete: function () {
-                            newyork.center_Entity.show = false;
-                            baverlyHill.center_Entity.show = false;
-                            isBaverlyHill = false;
-                            isNewYork = false;
-                        },
-                        orientation : {
-                            heading: Cesium.Math.toRadians(-60),
-                            pitch: Cesium.Math.toRadians(-25.0),
-                            roll: 0.0
-                        }
-                    });
+                new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(current_pos.coords.longitude, current_pos.coords.latitude, 1000.0), 500),
+                {
+                    maximumHeight: 10000000,
+                    complete: function () {
+                        newyork.center_Entity.show = false;
+                        baverlyHill.center_Entity.show = false;
+                        isBaverlyHill = false;
+                        isNewYork = false;
+                    },
+                    orientation : {
+                        heading: Cesium.Math.toRadians(-60),
+                        pitch: Cesium.Math.toRadians(-25.0),
+                        roll: 0.0
+                    }
+                });
 //            viewer.camera.flyTo({
 //                destination : Cesium.Cartesian3.fromDegrees(current_pos.coords.longitude + 200 / 10000, current_pos.coords.latitude - 100 / 10000, 1000.0),
 //                complete: function () {
@@ -212,7 +217,7 @@
 
         viewer.trackedEntity = man;
 
-        var street = new StreetView();
+        street = new StreetView();
         street.init(viewer, source);
 
         street.setLatLon(position.coords.longitude, position.coords.latitude);
@@ -235,7 +240,7 @@
         baverlyHill.center_Entity.show = false;
 
 
-//        street.initEvent();
+       // street.initEvent();
 
         this.viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
