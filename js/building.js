@@ -15,10 +15,10 @@ var Building = function()
     main.dataSource = null;
 
     main.heightArray = [
-        55,
-        90,
-        55,
-        55
+        65,
+        100,
+        65,
+        65
     ];
 
     main.entrance_path_pos_array_x = [
@@ -109,7 +109,6 @@ var Building = function()
             },
             maximumHeight: 1000,
             complete: function() {
-                console.log("move image");
                 main.image.position = main.entrance_pos;
                 /*
                 viewer.trackedEntity = main.entrance;
@@ -140,12 +139,15 @@ var Building = function()
             id: id,
             model: {
                 uri: main.uri_obj[number],
-                scale:main.scale
+                scale: main.scale,
+                shadows : Cesium.ShadowMode.DISABLED
             },
             orientation: Cesium.Transforms.headingPitchRollQuaternion(Cesium.Cartesian3.fromDegrees(main.pos.x, main.pos.y, 0),
                 new Cesium.HeadingPitchRoll(Cesium.Math.toRadians(main.direction), 0, 0))
         });
         main.building = entity;
+
+        entity.primitive
 
         var dx = main.entrance_pos_array_x[number] * main.scale;
         var dy = main.entrance_pos_array_y[number] * main.scale;

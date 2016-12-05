@@ -85,7 +85,6 @@
         }),
         infoBox : false,
         sceneModePicker : false,
-
     });
 
     var mousedown = false;
@@ -149,10 +148,11 @@
 
     function gotoHome() {
         if (isNewYork || isBaverlyHill) {
-            viewer.trackedEntity = man;
+            // viewer.trackedEntity = man;
+            viewer.trackedEntity = undefined;
             street.moveSelectBuildingOrigin();
             viewer.scene.camera.flyToBoundingSphere(
-                new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(current_pos.coords.longitude, current_pos.coords.latitude, 1000.0), 500),
+                new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(current_pos.coords.longitude, current_pos.coords.latitude, 400.0), 300),
                 {
                     maximumHeight: 10000000,
                     complete: function () {
@@ -198,6 +198,9 @@
     var current_pos = null;
 
     function fly(position) {
+
+        viewer.shadowMap.lightCamera = viewer.camera;
+
         var source = new Cesium.CustomDataSource();
         current_pos = position;
 
@@ -215,7 +218,8 @@
 
         source.entities.add(man);
 
-        viewer.trackedEntity = man;
+        // viewer.trackedEntity = man;
+        viewer.trackedEntity = undefined;
 
         street = new StreetView();
         street.init(viewer, source);
@@ -245,10 +249,10 @@
         this.viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
         function initEventOrientation() {
-            window.addEventListener("deviceorientation", handleOrientation);
+            // window.addEventListener("deviceorientation", handleOrientation);
         }
         viewer.scene.camera.flyToBoundingSphere(
-                new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude, 1000.0), 500),
+                new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude, 400.0), 300),
                 {
                     complete: initEventOrientation,
                     orientation : {
