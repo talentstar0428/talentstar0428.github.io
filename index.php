@@ -148,8 +148,8 @@
 
     function gotoHome() {
         if (isNewYork || isBaverlyHill) {
-            // viewer.trackedEntity = man;
-            viewer.trackedEntity = undefined;
+            viewer.trackedEntity = man;
+            // viewer.trackedEntity = undefined;
             street.moveSelectBuildingOrigin();
             viewer.scene.camera.flyToBoundingSphere(
                 new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(current_pos.coords.longitude, current_pos.coords.latitude, 400.0), 300),
@@ -218,8 +218,8 @@
 
         source.entities.add(man);
 
-        // viewer.trackedEntity = man;
-        viewer.trackedEntity = undefined;
+        viewer.trackedEntity = man;
+        // viewer.trackedEntity = undefined;
 
         street = new StreetView();
         street.init(viewer, source);
