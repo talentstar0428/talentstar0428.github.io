@@ -238,13 +238,13 @@
         function onUpMove(event) {
             if (street.selectBuilding == -1)
                 viewer.camera.moveDown(20);
-            else viewer.camera.rotateDown(Cesium.Math.toDegrees(0.002));
+            else viewer.camera.rotateUp(Cesium.Math.toDegrees(0.003));
         }
 
         function onDownMove(event) {
             if (street.selectBuilding == -1)
                 viewer.camera.moveUp(20);
-            else viewer.camera.rotateUp(Cesium.Math.toDegrees(0.002));
+            else viewer.camera.rotateDown(Cesium.Math.toDegrees(0.003));
         }
 
         function onDoubleTap(event) {
