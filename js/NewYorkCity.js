@@ -17,15 +17,6 @@ var NewYorkCity = function() {
     main.drawPos = function () {
         main.center_Entity = main.dataSource.entities.add({
             position : Cesium.Cartesian3.fromDegrees(main.city_pos.x, main.city_pos.y),
-            // model : {
-            //     uri: './3dobject/BeverlyHills/BeverlyHills.gltf',
-            //     scale:1
-            // },
-            // ellipse : {
-            //     semiMajorAxis : 10.0,
-            //     semiMinorAxis : 10.0,
-            //     material : Cesium.Color.TRANSPARENT
-            // },
             label : {
                 text: 'New York',
                 verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
@@ -45,6 +36,7 @@ var NewYorkCity = function() {
             complete: function () {
                 newyork.center_Entity.show = false;
                 baverlyHill.center_Entity.show = false;
+                isHome = false;
                 isNewYork = true;
                 isBaverlyHill = false;
             },
@@ -55,18 +47,5 @@ var NewYorkCity = function() {
                 roll: 0.0
             }
         });
-        // viewer.camera.flyTo({
-        //     destination : Cesium.Cartesian3.fromDegrees(main.city_pos.x + 200 / 10000, main.city_pos.y - 100 / 10000, 1000.0),
-        //     complete: function () {
-        //         isNewYork = true;
-        //         isBaverlyHill = false;
-        //     },
-        //     maximumHeight: 10000000,
-        //     orientation : {
-        //         heading: Cesium.Math.toRadians(-60),
-        //         pitch: Cesium.Math.toRadians(-25.0),
-        //         roll: 0.0
-        //     }
-        // });
     }
 }

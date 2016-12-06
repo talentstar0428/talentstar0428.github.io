@@ -22,15 +22,15 @@ var Building = function()
     ];
 
     main.entrance_path_pos_array_x = [
-        0.0000339996881280058,
-        0.000014243552428183648,
-        -0.000005612046905412171,
+        0.00008810836979478154 / 2,
+        0.000075267218647923074 / 2,
+        0.00002184520759840325 / 2,
     ];
 
     main.entrance_path_pos_array_y = [
-        -0.00020933833075531538,
-        -0.0002612784262012724,
-        -0.00022322242827499394
+        -0.0006251425159220503 / 2,
+        -0.0011989758017136864 / 2 ,
+        -0.0011339912153793819 / 2
     ];
 
     main.entrance_pos_array_x = [
@@ -44,18 +44,6 @@ var Building = function()
         -0.0008567573994788802 / 9,
         -0.0008671437243563673 / 9,
     ];
-
-    // main.entrance_pos_array_x = [
-    //     0.000031203612437025185,
-    //     0.000014541667624712318,
-    //     -0.000008614274207729977,
-    // ];
-
-    // main.entrance_pos_array_y = [
-    //     0.000048220073750826487,
-    //     -0.00006320785134050766,
-    //     0.000004138009423115818,
-    // ];
 
     main.uri_obj = [
         './3dobject/house1/exterior-p0b.gltf',
@@ -110,18 +98,6 @@ var Building = function()
             maximumHeight: 1000,
             complete: function() {
                 main.image.position = main.entrance_pos;
-                /*
-                viewer.trackedEntity = main.entrance;
-                viewer.camera.flyTo({
-                    destination : main.entrance_pos,
-                    maximumHeight: main.entrance_height,
-                    orientation : {
-                        heading : Cesium.Math.toRadians(heading),
-                        pitch : Cesium.Math.toRadians(0.0),
-                        roll : 0.0
-                    },
-                });
-                */
             }
         });
 

@@ -39,14 +39,12 @@ var StreetView = function()
 
             var id = "building_" + i;
             var number = Math.floor(Math.random() * 2 + 0.5);
-
             building.setBuilding(number, id);
 
             id = "image_" + i;
             building.setImage(number, id, i);
 
             building.draw();
-
             main.buildings.push(building);
 
         }
@@ -129,6 +127,7 @@ var StreetView = function()
     {
         if (main.selectBuilding != -1) {
             main.buildings[main.selectBuilding].imageMoveOriginal();
+            main.selectBuilding = -1;
         }
     }
 }
