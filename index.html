@@ -1,27 +1,9 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <!--
-    See https://github.com/AnalyticalGraphicsInc/cesium-google-earth-examples/blob/master/LICENSE.md
-
-    Original Work:
-
-    Copyright 2008 Google Inc.
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-         http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-    -->
     <title>3D World</title>
     <script type="text/javascript" src="js/lib/jquery.min.js"></script>
+    <script type="text/javascript" src="js/lib/hammer.min.js"></script>
     <script src="js/Cesium/Cesium.js"></script>
     <script src="js/StreetView.js"></script>
     <script src="js/gyronorm.js"></script>
@@ -93,6 +75,8 @@
 
     var isBaverlyHill = false;
 
+    var isHome = false;
+
     var newyork = new NewYorkCity();
 
     var baverlyHill = new BaverlyHill();
@@ -108,31 +92,11 @@
         if (this.mousedown == false) {
 
             viewer.camera.rotateLeft(y / 1000);
-//            viewer.camera.rotateUp(x / 1000);
-//            viewer.camera.rotateLeft(y / 1000);
-//            viewer.camera.rotateUp(x / 1000);
         }
 
     }
 
     function gotoNewYork() {
-
-//        var cartographicPosition = viewer.camera.positionCartographic;
-//
-//        console.log(Cesium.Math.toDegrees(cartographicPosition.longitude) - current_pos.coords.longitude);
-//        console.log(Cesium.Math.toDegrees(cartographicPosition.latitude) - current_pos.coords.latitude);
-//        console.log(viewer.camera.heading);
-//        console.log(viewer.camera.pitch);
-//        console.log(viewer.camera.roll);
-//
-//        viewer.camera.setView({
-//            destination : Cesium.Cartesian3.fromDegrees(current_pos.coords.longitude, current_pos.coords.latitude, 2000.0),
-//
-//
-//        });
-//
-//        return;
-
         if (isNewYork == false) {
             street.moveSelectBuildingOrigin();
             newyork.flyTo();
@@ -147,9 +111,8 @@
     }
 
     function gotoHome() {
-        if (isNewYork || isBaverlyHill) {
+        if (isHome == false) {
             viewer.trackedEntity = man;
-            // viewer.trackedEntity = undefined;
             street.moveSelectBuildingOrigin();
             viewer.scene.camera.flyToBoundingSphere(
                 new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(current_pos.coords.longitude, current_pos.coords.latitude, 400.0), 300),
@@ -158,6 +121,7 @@
                     complete: function () {
                         newyork.center_Entity.show = false;
                         baverlyHill.center_Entity.show = false;
+                        isHome = true;
                         isBaverlyHill = false;
                         isNewYork = false;
                     },
@@ -167,19 +131,6 @@
                         roll: 0.0
                     }
                 });
-//            viewer.camera.flyTo({
-//                destination : Cesium.Cartesian3.fromDegrees(current_pos.coords.longitude + 200 / 10000, current_pos.coords.latitude - 100 / 10000, 1000.0),
-//                complete: function () {
-//                    isBaverlyHill = false;
-//                    isNewYork = false;
-//                },
-//                maximumHeight: 10000000,
-//                orientation : {
-//                    heading: Cesium.Math.toRadians(-60),
-//                    pitch: Cesium.Math.toRadians(-25.0),
-//                    roll: 0.0
-//                }
-//            });
         }
     }
 
@@ -197,30 +148,44 @@
 
     var current_pos = null;
 
+    var xDown = null;                                                        
+    var yDown = null;
+
+    var cesiumContainer = document.getElementById("cesiumContainer");
+
+    var doubleTapEntity = null;
+
     function fly(position) {
 
         viewer.shadowMap.lightCamera = viewer.camera;
 
         var source = new Cesium.CustomDataSource();
         current_pos = position;
-
         viewer.dataSources.add(source);
 
         man = new Cesium.Entity({
             position : Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude),
             id: 'man',
             ellipse : {
-                semiMajorAxis : 700.0,
-                semiMinorAxis : 700.0,
+                semiMajorAxis : 500.0,
+                semiMinorAxis : 500.0,
+                material : Cesium.Color.TRANSPARENT,
+            },
+        });
+
+        doubleTapEntity = new Cesium.Entity({
+            position : Cesium.Cartesian3.fromDegrees(0, 0),
+            ellipse : {
+                semiMajorAxis : 10.0,
+                semiMinorAxis : 10.0,
                 material : Cesium.Color.TRANSPARENT,
             },
         });
 
         source.entities.add(man);
+        source.entities.add(doubleTapEntity);
 
         viewer.trackedEntity = man;
-        // viewer.trackedEntity = undefined;
-
         street = new StreetView();
         street.init(viewer, source);
 
@@ -232,11 +197,11 @@
 
         street.enableCameraMoveEventHandler(viewer);
 
-        newyork.init(source, {x:    -73.985130, y:  40.758896});
+        newyork.init(source, {x: -73.985130, y: 40.758896});
 
         newyork.drawPos();
 
-        baverlyHill.init(source, {x:  -118.3994444, y:   34.0736111});
+        baverlyHill.init(source, {x: -118.3994444, y: 34.0736111});
 
         baverlyHill.drawPos();
 
@@ -244,13 +209,65 @@
         baverlyHill.center_Entity.show = false;
 
 
-       // street.initEvent();
+        street.initEvent();
 
         this.viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+        this.viewer.screenSpaceEventHandler.destroy();
 
         function initEventOrientation() {
             // window.addEventListener("deviceorientation", handleOrientation);
+            isHome = true;
+            var controller = viewer.scene.screenSpaceCameraController;
+            controller.enableRotate = false;
+
+            Hammer(cesiumContainer).on("panleft", onLeftSwipe);
+            Hammer(cesiumContainer).on("panright", onRightSwipe);
+            Hammer(cesiumContainer).on("panup", onUpMove);
+            Hammer(cesiumContainer).on("pandown", onDownMove);
+            Hammer(cesiumContainer).on("doubletap", onDoubleTap);
         }
+
+        function onLeftSwipe(event) {
+            viewer.camera.rotateLeft(Cesium.Math.toDegrees(0.0003));
+        }
+
+        function onRightSwipe(event) {
+            viewer.camera.rotateRight(Cesium.Math.toDegrees(0.0003));
+        }
+
+        function onUpMove(event) {
+            if (street.selectBuilding == -1)
+                viewer.camera.moveDown(20);
+            else viewer.camera.rotateDown(Cesium.Math.toDegrees(0.002));
+        }
+
+        function onDownMove(event) {
+            if (street.selectBuilding == -1)
+                viewer.camera.moveUp(20);
+            else viewer.camera.rotateUp(Cesium.Math.toDegrees(0.002));
+        }
+
+        function onDoubleTap(event) {
+            var position = viewer.camera.pickEllipsoid({x:event.pointers[0].clientX, y:event.pointers[0].clientY});
+            var cartographicPosition = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
+            doubleTapEntity.position = Cesium.Cartesian3.fromDegrees(Cesium.Math.toDegrees(cartographicPosition.longitude), 
+                Cesium.Math.toDegrees(cartographicPosition.latitude));
+            viewer.trackedEntity = doubleTapEntity;
+
+            viewer.scene.camera.flyToBoundingSphere(
+                new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(Cesium.Math.toDegrees(cartographicPosition.longitude)
+                    , Cesium.Math.toDegrees(cartographicPosition.latitude), 100.0), 50),
+                {
+                    complete: function () {
+                        isHome = false;
+                        isBaverlyHill = false;
+                        isNewYork = false;
+                        street.selectBuilding = -1;
+                    },
+                });
+
+        }
+
         viewer.scene.camera.flyToBoundingSphere(
                 new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude, 400.0), 300),
                 {
@@ -261,27 +278,9 @@
                         roll: 0.0
                     }
                 });
-
-//        viewer.scene.camera.flyTo({
-//            destination : Cesium.Cartesian3.fromDegrees(position.coords.longitude  + 200 / 10000, position.coords.latitude - 100 / 10000, 1000.0),
-//            complete: initEventOrientation,
-//            orientation : {
-//                heading: Cesium.Math.toRadians(-60),
-//                pitch: Cesium.Math.toRadians(-25.0),
-//                roll: 0.0
-//            }
-//        });
     }
 
-
-
-    // Ask browser for location, and fly there.
     navigator.geolocation.getCurrentPosition(fly);
-
-    // Comparable Google Earth API code:
-    //
-    // https://code.google.com/p/earth-api-samples/source/browse/trunk/demos/geolocation/index.html
-
 </script>
 </body>
 </html>
