@@ -202,7 +202,7 @@
 
         newyork.drawPos();
 
-        baverlyHill.init(source, {x: -118.3994444, y: 34.0736111});
+        baverlyHill.init(source, {x: -118.402545, y: 34.0736204});
 
         baverlyHill.drawPos();
 
@@ -242,23 +242,23 @@
         }
 
         function onLeftSwipe(diff) {
-            viewer.camera.rotateLeft(Cesium.Math.toDegrees(0.0003));
+            viewer.camera.rotateLeft(Cesium.Math.toDegrees(0.003));
         }
 
         function onRightSwipe(diff) {
-            viewer.camera.rotateRight(Cesium.Math.toDegrees(0.0003));
+            viewer.camera.rotateRight(Cesium.Math.toDegrees(0.003));
         }
 
         function onUpMove(diff) {
-            if (viewer.camera.position.z > 40)
-                viewer.camera.move(new Cesium.Cartesian3(viewer.camera.direction.x, viewer.camera.direction.y, 0), viewer.camera.position.z / 40);
-            else viewer.camera.move(new Cesium.Cartesian3(viewer.camera.direction.x, viewer.camera.direction.y, 0), 1);
+            if (viewer.camera.position.z > 10)
+                viewer.camera.move(new Cesium.Cartesian3(viewer.camera.direction.x, viewer.camera.direction.y, 0), viewer.camera.position.z / 6);
+            else viewer.camera.move(new Cesium.Cartesian3(viewer.camera.direction.x, viewer.camera.direction.y, 0), 4);
         }
 
         function onDownMove(diff) {
-            if (viewer.camera.position.z > 40)
-                viewer.camera.move(new Cesium.Cartesian3(viewer.camera.direction.x, viewer.camera.direction.y, 0), -viewer.camera.position.z / 40);
-            else viewer.camera.move(new Cesium.Cartesian3(viewer.camera.direction.x, viewer.camera.direction.y, 0), -1);
+            if (viewer.camera.position.z > 10)
+                viewer.camera.move(new Cesium.Cartesian3(viewer.camera.direction.x, viewer.camera.direction.y, 0), -viewer.camera.position.z / 6);
+            else viewer.camera.move(new Cesium.Cartesian3(viewer.camera.direction.x, viewer.camera.direction.y, 0), -4);
         }
 
         function onDoubleTap(event) {

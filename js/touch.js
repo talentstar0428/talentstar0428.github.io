@@ -25,6 +25,11 @@ var Touch = function () {
 	}
 
 	main.startTouch		=	function(event) {
+		console.log(main.isTouchSupport);
+		if (main.isTouchSupport != false && event.touches.length >= 1) {
+			main.isAction == false;
+			return;
+		}
 		main.isAction 	=	true;
 
 		main.xDown		=	main.isTouchSupport?event.touches[0].clientX:event.clientX;
@@ -32,6 +37,10 @@ var Touch = function () {
 	}
 
 	main.moveTouch		=	function(event) {
+		if (main.isTouchSupport != false && event.touches.length >= 1) {
+			main.isAction == false;
+			return;
+		}
 		if (main.isAction) {
 			var xUp 	= 	main.isTouchSupport?event.touches[0].clientX:event.clientX;
 			var yUp		=	main.isTouchSupport?event.touches[0].clientY:event.clientY;
