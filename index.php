@@ -10,6 +10,7 @@
     <script src="js/building.js"></script>
     <script src="js/NewYorkCity.js"></script>
     <script src="js/BaverlyHill.js"></script>
+    <script src="js/touch.js"></script>
     <style>
         @import url(js/Cesium/Widgets/widgets.css);
         html, body, #cesiumContainer {
@@ -220,35 +221,44 @@
             var controller = viewer.scene.screenSpaceCameraController;
             controller.enableRotate = false;
 
-            Hammer(cesiumContainer).on("panleft", onLeftSwipe);
-            Hammer(cesiumContainer).on("panright", onRightSwipe);
-            Hammer(cesiumContainer).on("panup", onUpMove);
-            Hammer(cesiumContainer).on("pandown", onDownMove);
+            var touch = new Touch();
+            touch.init(cesiumContainer, horizontalFunc, verticalFunc);
+
             Hammer(cesiumContainer).on("doubletap", onDoubleTap);
         }
 
-        function onLeftSwipe(event) {
+        function horizontalFunc(diff) {
+            if (diff > 0) 
+                onLeftSwipe(diff);
+            else 
+                onRightSwipe(diff);
+        }
+
+        function verticalFunc(diff) {
+            if (diff > 0) 
+                onDownMove(diff);
+            else 
+                onUpMove(diff);
+        }
+
+        function onLeftSwipe(diff) {
             viewer.camera.rotateLeft(Cesium.Math.toDegrees(0.0003));
         }
 
-        function onRightSwipe(event) {
+        function onRightSwipe(diff) {
             viewer.camera.rotateRight(Cesium.Math.toDegrees(0.0003));
         }
 
-        function onUpMove(event) {
-            if (street.selectBuilding == -1) {
-                viewer.camera.move(new Cesium.Cartesian3(viewer.camera.direction.x, viewer.camera.direction.y, 0), 20);
-                // viewer.camera.moveDown(20);
-            }
-            else viewer.camera.rotateUp(Cesium.Math.toDegrees(0.002));
+        function onUpMove(diff) {
+            if (viewer.camera.position.z > 40)
+                viewer.camera.move(new Cesium.Cartesian3(viewer.camera.direction.x, viewer.camera.direction.y, 0), viewer.camera.position.z / 40);
+            else viewer.camera.move(new Cesium.Cartesian3(viewer.camera.direction.x, viewer.camera.direction.y, 0), 1);
         }
 
-        function onDownMove(event) {
-            if (street.selectBuilding == -1) {
-                viewer.camera.move(new Cesium.Cartesian3(viewer.camera.direction.x, viewer.camera.direction.y, 0), -20);
-                // viewer.camera.moveUp(20);
-            }
-            else viewer.camera.rotateDown(Cesium.Math.toDegrees(0.002));
+        function onDownMove(diff) {
+            if (viewer.camera.position.z > 40)
+                viewer.camera.move(new Cesium.Cartesian3(viewer.camera.direction.x, viewer.camera.direction.y, 0), -viewer.camera.position.z / 40);
+            else viewer.camera.move(new Cesium.Cartesian3(viewer.camera.direction.x, viewer.camera.direction.y, 0), -1);
         }
 
         function onDoubleTap(event) {
