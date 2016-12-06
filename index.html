@@ -236,15 +236,19 @@
         }
 
         function onUpMove(event) {
-            if (street.selectBuilding == -1)
-                viewer.camera.moveDown(20);
-            else viewer.camera.rotateUp(Cesium.Math.toDegrees(0.003));
+            if (street.selectBuilding == -1) {
+                viewer.camera.move(new Cesium.Cartesian3(viewer.camera.direction.x, viewer.camera.direction.y, 0), 20);
+                // viewer.camera.moveDown(20);
+            }
+            else viewer.camera.rotateUp(Cesium.Math.toDegrees(0.002));
         }
 
         function onDownMove(event) {
-            if (street.selectBuilding == -1)
-                viewer.camera.moveUp(20);
-            else viewer.camera.rotateDown(Cesium.Math.toDegrees(0.003));
+            if (street.selectBuilding == -1) {
+                viewer.camera.move(new Cesium.Cartesian3(viewer.camera.direction.x, viewer.camera.direction.y, 0), -20);
+                // viewer.camera.moveUp(20);
+            }
+            else viewer.camera.rotateDown(Cesium.Math.toDegrees(0.002));
         }
 
         function onDoubleTap(event) {
