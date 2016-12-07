@@ -26,7 +26,7 @@ var Touch = function () {
 
 	main.startTouch		=	function(event) {
 		console.log(main.isTouchSupport);
-		if (main.isTouchSupport != false && event.touches.length >= 1) {
+		if (main.isTouchSupport != false && event.touches.length > 1) {
 			main.isAction == false;
 			return;
 		}
@@ -37,7 +37,7 @@ var Touch = function () {
 	}
 
 	main.moveTouch		=	function(event) {
-		if (main.isTouchSupport != false && event.touches.length >= 1) {
+		if (main.isTouchSupport != false && event.touches.length > 1) {
 			main.isAction == false;
 			return;
 		}
