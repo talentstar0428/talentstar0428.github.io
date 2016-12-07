@@ -1,6 +1,10 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    
     <title>3D World</title>
     <script type="text/javascript" src="js/lib/jquery.min.js"></script>
     <script type="text/javascript" src="js/lib/hammer.min.js"></script>
@@ -19,282 +23,37 @@
     </style>
     <link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
-<body>
 
-<div id="preview">
-    <div id="previewContent">
-        <div id="buttonContainer">
-            <div id="altContainer">
-                <label>Longitude: </label><span id="longitude">0</span>
-                <br>
-                <label>Latitude: </label><span id="latitude">0</span>
+<body onload="main();">
+    <div id="preview">
+        <div id="previewContent">
+            <div id="buttonContainer">
+                <div id="altContainer">
+                    <label>Longitude: </label><span id="longitude">0</span>
+                    <br>
+                    <label>Latitude: </label><span id="latitude">0</span>
+                </div>
             </div>
-        </div>
 
-        <div id="top_btn_area">
-            <button id="New_York" class="abs_btn" onclick="gotoNewYork()">New York</button>
-            <button id="BeverlyHill" class="abs_btn" onclick="gotoBeverlyHill()">Beverly Hills</button>
-        </div>
+            <div id="top_btn_area">
+                <button id="New_York" class="abs_btn" onclick="gotoNewYork()">New York</button>
+                <button id="BeverlyHill" class="abs_btn" onclick="gotoBeverlyHill()">Beverly Hills</button>
+            </div>
 
-        <div id="home_area">
-            <img src="./images/home.png" id="Home" alt="Home" onclick="gotoHome()" />
-        </div>
+            <div id="home_area">
+                <img src="./images/home.png" id="Home" alt="Home" onclick="gotoHome()" />
+            </div>
 
-        <div id="cesiumContainer"></div>
+            <div id="cesiumContainer"></div>
+        </div>
     </div>
-</div>
 
-<div id="popup">
-    <center id="pos_info">Lat : 0.00, Lng : 0.00</center>
-    <center>URL : http://test.com</center>
-</div>
+    <div id="popup">
+        <center id="pos_info">Lat : 0.00, Lng : 0.00</center>
+        <center>URL : http://test.com</center>
+    </div>
 
-<script>
-    Cesium.BingMapsApi.defaultKey = 'AsarFiDvISunWhi137V7l5Bu80baB73npU98oTyjqKOb7NbrkiuBPZfDxgXTrGtQ';
-    var viewer = new Cesium.Viewer('cesiumContainer', {
-        homeButton : false,
-        creditContainer : null,
-        navigationHelpButton : false,
-        navigationInstructionsInitiallyVisible: false,
-        timeline : false,
-        clock : null,
-        automaticallyTrackDataSourceClocks:false,
-        selectionIndicator:false,
-        fullscreenElement: 'previewContent',
-        baseLayerPicker: false,
-        imageryProvider : new Cesium.createOpenStreetMapImageryProvider({
-            url : 'https://stamen-tiles.a.ssl.fastly.net/watercolor/',
-            fileExtension: 'png'
-        }),
-        infoBox : false,
-        sceneModePicker : false,
-    });
+    <script src="js/main.js"></script>
 
-    var mousedown = false;
-
-    var isNewYork = false;
-
-    var isBaverlyHill = false;
-
-    var isHome = false;
-
-    var newyork = new NewYorkCity();
-
-    var baverlyHill = new BaverlyHill();
-
-    var street;
-
-    function handleOrientation(event) {
-
-        var z = event.alpha;
-        var x = event.beta;
-        var y = event.gamma;
-
-        if (this.mousedown == false) {
-
-            viewer.camera.rotateLeft(y / 1000);
-        }
-
-    }
-
-    function gotoNewYork() {
-        if (isNewYork == false) {
-            street.moveSelectBuildingOrigin();
-            newyork.flyTo();
-        }
-    }
-
-    function gotoBeverlyHill() {
-        if (isBaverlyHill == false) {
-            street.moveSelectBuildingOrigin();
-            baverlyHill.flyTo();
-        }
-    }
-
-    function gotoHome() {
-        if (isHome == false) {
-            viewer.trackedEntity = man;
-            street.moveSelectBuildingOrigin();
-            viewer.scene.camera.flyToBoundingSphere(
-                new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(current_pos.coords.longitude, current_pos.coords.latitude, 400.0), 300),
-                {
-                    maximumHeight: 10000000,
-                    complete: function () {
-                        newyork.center_Entity.show = false;
-                        baverlyHill.center_Entity.show = false;
-                        isHome = true;
-                        isBaverlyHill = false;
-                        isNewYork = false;
-                    },
-                    orientation : {
-                        heading: Cesium.Math.toRadians(-60),
-                        pitch: Cesium.Math.toRadians(-25.0),
-                        roll: 0.0
-                    }
-                });
-        }
-    }
-
-    window.onmousedown = onMouseDown;
-    window.onmouseup = onMouseUp;
-
-    function onMouseDown(event) {
-        this.mousedown = true;
-    }
-    function onMouseUp(event) {
-        this.mousedown = false;
-    }
-
-    var man = null;
-
-    var current_pos = null;
-
-    var xDown = null;                                                        
-    var yDown = null;
-
-    var cesiumContainer = document.getElementById("cesiumContainer");
-
-    var doubleTapEntity = null;
-
-    function fly(position) {
-
-        viewer.shadowMap.lightCamera = viewer.camera;
-
-        var source = new Cesium.CustomDataSource();
-        current_pos = position;
-        viewer.dataSources.add(source);
-
-        man = new Cesium.Entity({
-            position : Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude),
-            id: 'man',
-            ellipse : {
-                semiMajorAxis : 500.0,
-                semiMinorAxis : 500.0,
-                material : Cesium.Color.TRANSPARENT,
-            },
-        });
-
-        doubleTapEntity = new Cesium.Entity({
-            position : Cesium.Cartesian3.fromDegrees(0, 0),
-            ellipse : {
-                semiMajorAxis : 10.0,
-                semiMinorAxis : 10.0,
-                material : Cesium.Color.TRANSPARENT,
-            },
-        });
-
-        source.entities.add(man);
-        source.entities.add(doubleTapEntity);
-
-        viewer.trackedEntity = man;
-        street = new StreetView();
-        street.init(viewer, source);
-
-        street.setLatLon(position.coords.longitude, position.coords.latitude);
-
-        street.dispObject();
-
-        street.enableSpaceEventHandler(viewer);
-
-        street.enableCameraMoveEventHandler(viewer);
-
-        newyork.init(source, {x: -73.985130, y: 40.758896});
-
-        newyork.drawPos();
-
-        baverlyHill.init(source, {x: -118.402545, y: 34.0736204});
-
-        baverlyHill.drawPos();
-
-        newyork.center_Entity.show = false;
-        baverlyHill.center_Entity.show = false;
-
-
-        street.initEvent();
-
-        this.viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
-        this.viewer.screenSpaceEventHandler.destroy();
-
-        function initEventOrientation() {
-            // window.addEventListener("deviceorientation", handleOrientation);
-            isHome = true;
-            var controller = viewer.scene.screenSpaceCameraController;
-            controller.enableRotate = false;
-
-            var touch = new Touch();
-            touch.init(cesiumContainer, horizontalFunc, verticalFunc);
-
-            Hammer(cesiumContainer).on("doubletap", onDoubleTap);
-        }
-
-        function horizontalFunc(diff) {
-            if (diff > 0) 
-                onLeftSwipe(diff);
-            else 
-                onRightSwipe(diff);
-        }
-
-        function verticalFunc(diff) {
-            if (diff > 0) 
-                onDownMove(diff);
-            else 
-                onUpMove(diff);
-        }
-
-        function onLeftSwipe(diff) {
-            viewer.camera.rotateLeft(Cesium.Math.toDegrees(0.003));
-        }
-
-        function onRightSwipe(diff) {
-            viewer.camera.rotateRight(Cesium.Math.toDegrees(0.003));
-        }
-
-        function onUpMove(diff) {
-            if (viewer.camera.position.z > 10)
-                viewer.camera.move(new Cesium.Cartesian3(viewer.camera.direction.x, viewer.camera.direction.y, 0), viewer.camera.position.z / 6);
-            else viewer.camera.move(new Cesium.Cartesian3(viewer.camera.direction.x, viewer.camera.direction.y, 0), 4);
-        }
-
-        function onDownMove(diff) {
-            if (viewer.camera.position.z > 10)
-                viewer.camera.move(new Cesium.Cartesian3(viewer.camera.direction.x, viewer.camera.direction.y, 0), -viewer.camera.position.z / 6);
-            else viewer.camera.move(new Cesium.Cartesian3(viewer.camera.direction.x, viewer.camera.direction.y, 0), -4);
-        }
-
-        function onDoubleTap(event) {
-            var position = viewer.camera.pickEllipsoid({x:event.pointers[0].clientX, y:event.pointers[0].clientY});
-            var cartographicPosition = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
-            doubleTapEntity.position = Cesium.Cartesian3.fromDegrees(Cesium.Math.toDegrees(cartographicPosition.longitude), 
-                Cesium.Math.toDegrees(cartographicPosition.latitude));
-            viewer.trackedEntity = doubleTapEntity;
-
-            viewer.scene.camera.flyToBoundingSphere(
-                new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(Cesium.Math.toDegrees(cartographicPosition.longitude)
-                    , Cesium.Math.toDegrees(cartographicPosition.latitude), 100.0), 50),
-                {
-                    complete: function () {
-                        isHome = false;
-                        isBaverlyHill = false;
-                        isNewYork = false;
-                        street.selectBuilding = -1;
-                    },
-                });
-
-        }
-
-        viewer.scene.camera.flyToBoundingSphere(
-                new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude, 400.0), 300),
-                {
-                    complete: initEventOrientation,
-                    orientation : {
-                        heading: Cesium.Math.toRadians(-60),
-                        pitch: Cesium.Math.toRadians(-25.0),
-                        roll: 0.0
-                    }
-                });
-    }
-
-    navigator.geolocation.getCurrentPosition(fly);
-</script>
 </body>
 </html>

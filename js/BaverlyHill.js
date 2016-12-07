@@ -16,7 +16,8 @@ var BaverlyHill = function() {
 
     main.drawPos = function () {
         main.center_Entity = main.dataSource.entities.add({
-            position : Cesium.Cartesian3.fromDegrees(main.city_pos.x, main.city_pos.y),
+            position    : Cesium.Cartesian3.fromDegrees(main.city_pos.x, main.city_pos.y),
+            id          : "BeverlyHills",
             label : {
                 text: 'Baverly Hills',
                 verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
@@ -24,6 +25,11 @@ var BaverlyHill = function() {
                 scale   :   5
 
             }, 
+            // model: {
+            //     uri: "./3dobject/BeverlyHills/BeverlyHills.gltf",
+            //     shadows : Cesium.ShadowMode.DISABLED,
+            //     scale   : 3
+            // },
             show : false
         });
     }
