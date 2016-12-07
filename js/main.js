@@ -232,7 +232,7 @@ function fly(position)
 
     function onRightSwipe(diff) 
     {
-        viewer.camera.rotateRight(Cesium.Math.tosDegrees(0.001));
+        viewer.camera.rotateRight(Cesium.Math.toDegrees(0.001));
     }
 
     function onUpMove(diff) 
