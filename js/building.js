@@ -98,6 +98,7 @@ var Building = function()
             maximumHeight: 1000,
             complete: function() {
                 main.image.position = main.entrance_pos;
+                isBuildingZoom = true;
             }
         });
 

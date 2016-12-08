@@ -11,7 +11,7 @@ var Touch = function () {
 	var horizontalFunc	=	null;
 	var verticalFunc	=	null;
 
-	main.init 			=	function(widget, horizontalFunc, verticalFunc) {
+	main.init 			=	function(widget, horizontalFunc, verticalFunc, zoomFunc) {
 		main.isTouchSupport		=	'ontouchstart' in window;
 		main.startEvent			=	main.isTouchSupport?'touchstart':'mousedown';
 		main.moveEvent			=	main.isTouchSupport?'touchmove':'mousemove';

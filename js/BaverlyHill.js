@@ -16,20 +16,18 @@ var BaverlyHill = function() {
 
     main.drawPos = function () {
         main.center_Entity = main.dataSource.entities.add({
-            position    : Cesium.Cartesian3.fromDegrees(main.city_pos.x, main.city_pos.y),
-            id          : "BeverlyHills",
-            label : {
-                text: 'Baverly Hills',
-                verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-                eyeOffset: new Cesium.Cartesian3(0,0,-30),
-                scale   :   5
+            position : Cesium.Cartesian3.fromDegrees(main.city_pos.x, main.city_pos.y),
+            // label : {
+            //     text: 'Baverly Hills',
+            //     verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+            //     eyeOffset: new Cesium.Cartesian3(0,0,-30),
+            //     scale   :   5
 
-            }, 
-            // model: {
-            //     uri: "./3dobject/BeverlyHills/BeverlyHills.gltf",
-            //     shadows : Cesium.ShadowMode.DISABLED,
-            //     scale   : 3
             // },
+            model: {
+                uri: "./3dobject/BeverlyHills/BeverlyHills_beforeTS.glb",
+                shadows : Cesium.ShadowMode.DISABLED
+            },
             show : false
         });
     }
@@ -42,7 +40,7 @@ var BaverlyHill = function() {
             {
                 complete: function () {
                     newyork.center_Entity.show = false;
-                    baverlyHill.center_Entity.show = false;
+                    baverlyHill.center_Entity.show = true;
                     isHome = false;
                     isBaverlyHill = true;
                     isNewYork = false;
