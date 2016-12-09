@@ -1,9 +1,12 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <!--<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"><!--device-width,-->
+    <meta name="viewport" content="width=initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5, user-scalable=no">
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
     
     <title>3D World</title>
     <script type="text/javascript" src="js/lib/jquery.min.js"></script>
@@ -15,11 +18,24 @@
     <script src="js/NewYorkCity.js"></script>
     <script src="js/BaverlyHill.js"></script>
     <script src="js/touch.js"></script>
+    <script src="js/Intersection/IntersectionAPI.js"></script>
+    <script src="js/citydb/3dcitydb-web-map.js"></script>  
+    <script src="js/citydb/CitydbUtil.js"></script>  
+    <script src="js/citydb/CitydbWebworker.js"></script>
+    <script src="js/citydb/CitydbSceneTransforms.js"></script> 
+    <script src="js/citydb/CitydbKmlHighlightingManager.js"></script>   
+    <script src="js/citydb/CitydbKmlTilingManager.js"></script>  
+    <script src="js/citydb/CitydbKmlDataSource.js"></script>    
+    <script src="js/citydb/CitydbKmlLayer.js"></script> 
     <link rel="stylesheet" type="text/css" href="css/style.css" />
     <style>
         @import url(js/Cesium/Widgets/widgets.css);
         html, body, #cesiumContainer {
-            width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+            width: 100%; 
+            height: 100%; 
+            margin: 0; 
+            padding: 0; 
+            overflow: hidden;
         }
     </style>
 </head>

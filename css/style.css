@@ -77,7 +77,7 @@ body
 	width 	: 410px;
 	position: absolute;
 	z-index: 99;
-	top 	: 50px;
+	top 	: 70px;
 	left 	: calc(50% - 205px);
 }
 

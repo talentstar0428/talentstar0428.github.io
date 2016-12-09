@@ -2,6 +2,7 @@ var Touch = function () {
 	
 	var main			=	this;
 	var isAction		=	false;
+	var isMoving 		= 	false;
 	var isTouchSupport	=	null;
 	var startEvent		=	null;
 	var moveEvent		=	null;
@@ -27,9 +28,11 @@ var Touch = function () {
 	main.startTouch		=	function(event) {
 		if (main.isTouchSupport != false && event.touches.length > 1) {
 			main.isAction == false;
+			main.isMoving == false;
 			return;
 		}
 		main.isAction 	=	true;
+		main.isMoving 	=	false;
 
 		main.xDown		=	main.isTouchSupport?event.touches[0].clientX:event.clientX;
 		main.yDown		=	main.isTouchSupport?event.touches[0].clientY:event.clientY;
@@ -40,12 +43,26 @@ var Touch = function () {
 			main.isAction == false;
 			return;
 		}
-		if (main.isAction) {
+
+		if (main.isAction == true && main.isMoving == false) {
 			var xUp 	= 	main.isTouchSupport?event.touches[0].clientX:event.clientX;
 			var yUp		=	main.isTouchSupport?event.touches[0].clientY:event.clientY;
 
 			var xDiff	=	xUp - main.xDown;
 			var yDiff	=	yUp - main.yDown;
+			if (Math.pow(xDiff, 2) + Math.pow(yDiff, 2) > 150) {
+				main.isMoving = true;
+			}
+		}
+
+		if (main.isAction && main.isMoving) {
+			var xUp 	= 	main.isTouchSupport?event.touches[0].clientX:event.clientX;
+			var yUp		=	main.isTouchSupport?event.touches[0].clientY:event.clientY;
+
+			var xDiff	=	xUp - main.xDown;
+			var yDiff	=	yUp - main.yDown;
+			console.log(xDiff);
+			console.log(yDiff)
 			if (Math.abs(xDiff) > Math.abs(yDiff)) {
 				main.horizontalFunc(xDiff);
 			}
@@ -59,6 +76,7 @@ var Touch = function () {
 
 	main.endTouch		=	function(event) {
 		main.isAction 	=	false;
+		main.isMoving 	= 	true;
 		main.xDown		=	null;
 		main.yDown 		=	null;
 	}

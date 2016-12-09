@@ -6,16 +6,14 @@ var BaverlyHill = function() {
 
     var main                =   this;
     var city_pos            =   null;
-    var dataSource          =   null;
     var center_Entity       =   null;
 
-    main.init = function (dataSource, position){
+    main.init = function (position){
         main.city_pos       =   position;
-        main.dataSource     =   dataSource;
     }
 
     main.drawPos = function () {
-        main.center_Entity = main.dataSource.entities.add({
+        main.center_Entity = viewer.entities.add({
             position : Cesium.Cartesian3.fromDegrees(main.city_pos.x, main.city_pos.y),
             // label : {
             //     text: 'Baverly Hills',
@@ -25,8 +23,9 @@ var BaverlyHill = function() {
 
             // },
             model: {
-                uri: "./3dobject/BeverlyHills/BeverlyHills_beforeTS.glb",
-                shadows : Cesium.ShadowMode.DISABLED
+                uri: "./3dobject/BeverlyHills/BeverlyHills_beforeTS.gltf",
+                shadows : Cesium.ShadowMode.DISABLED,
+                scale: 0.3
             },
             show : false
         });

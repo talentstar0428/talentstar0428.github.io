@@ -8,7 +8,6 @@ var viewer                          = new Cesium.Viewer('cesiumContainer', {
                                         navigationInstructionsInitiallyVisible: false,
                                         timeline : false,
                                         clock : null,
-                                        automaticallyTrackDataSourceClocks:false,
                                         selectionIndicator:false,
                                         fullscreenElement: 'previewContent',
                                         baseLayerPicker: false,
@@ -72,7 +71,6 @@ function handleOrientation(event)
 
     if (this.mousedown == false) 
     {
-
         viewer.camera.rotateLeft(y / 1000);
     }
 
@@ -145,13 +143,7 @@ function onMouseUp(event)
 
 function fly(position) 
 {
-
-    viewer.shadowMap.lightCamera        = viewer.camera;
-
-    var source                          = new Cesium.CustomDataSource();
     current_pos                         = position;
-
-    viewer.dataSources.add(source);
 
     man = new Cesium.Entity(
     {
@@ -174,22 +166,22 @@ function fly(position)
         },
     });
 
-    source.entities.add(man);
-    source.entities.add(doubleTapEntity);
+    viewer.entities.add(man);
+    viewer.entities.add(doubleTapEntity);
 
     viewer.trackedEntity = man;
 
     street = new StreetView();
-    street.init(viewer, source);
+    street.init(viewer);
     street.setLatLon(position.coords.longitude, position.coords.latitude);
     street.dispObject();
     street.enableSpaceEventHandler(viewer);
     // street.enableCameraMoveEventHandler(viewer);
 
-    newyork.init(source, {x: -73.985130, y: 40.758896});
+    newyork.init({x: -73.985130, y: 40.758896});
     newyork.drawPos();
 
-    baverlyHill.init(source, {x: -118.402545, y: 34.0736204});
+    baverlyHill.init({x: -118.401345, y: 34.067806});
     baverlyHill.drawPos();
 
     newyork.center_Entity.show = false;
@@ -292,7 +284,8 @@ function fly(position)
 
     function onLeftSwipe(diff) 
     {   
-        viewer.camera.rotateLeft(Cesium.Math.toDegrees(0.0008));   
+        viewer.camera.rotateLeft(Cesium.Math.toDegrees(0.0008));
+
     }
 
     function onRightSwipe(diff) 

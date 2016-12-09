@@ -1,7 +1,6 @@
 var StreetView = function()
 {
     var main = this;
-    main.dataSource = null;
     main.ptnPath = "obj/";
     main.render_id = 0;
 
@@ -14,12 +13,11 @@ var StreetView = function()
 
     main.scene = null;
 
-    main.init = function(viewer, dataSource) {
+    main.init = function(viewer) {
         main.scene = viewer.scene;
-        main.dataSource = dataSource;
     }
 
-    main.selectBuilding = -1;
+    main.selectBuilding = 0;
 
     main.dispObject = function() {
 
@@ -34,7 +32,7 @@ var StreetView = function()
             }
 
             var building = new Building();
-            building.init(main.scene, main.dataSource);
+            building.init(main.scene);
             building.setPosition({x:x, y:y});
 
             var id = "building_" + i;
@@ -119,8 +117,8 @@ var StreetView = function()
     main.onDocumentMouseClick = function (event) {
         var position = viewer.camera.pickEllipsoid({x:event.clientX, y:event.clientY});
         var cartographicPosition = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
-        // console.log(Cesium.Math.toDegrees(cartographicPosition.longitude) - main.buildings[main.selectBuilding].pos.x);
-        // console.log(Cesium.Math.toDegrees(cartographicPosition.latitude) - main.buildings[main.selectBuilding].pos.y);
+        console.log(Cesium.Math.toDegrees(cartographicPosition.longitude) - main.buildings[main.selectBuilding].pos.x);
+        console.log(Cesium.Math.toDegrees(cartographicPosition.latitude) - main.buildings[main.selectBuilding].pos.y);
     }
 
     main.moveSelectBuildingOrigin = function ()

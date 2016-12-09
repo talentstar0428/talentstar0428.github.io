@@ -8,29 +8,36 @@ var Building = function()
 
     main.image = null;
 
+    main.line = null;
+
     main.height = 0;
 
     main.scene = null;
 
-    main.dataSource = null;
-
     main.heightArray = [
-        65,
-        100,
-        65,
-        65
+        18,
+        30,
+        18,
+        30
+    ];
+
+    main.line_heightArray = [
+        10,
+        10,
+        10,
+        30
     ];
 
     main.entrance_path_pos_array_x = [
-        0.00008810836979478154 / 2,
-        0.000075267218647923074 / 2,
-        0.00002184520759840325 / 2,
+        -0.000012867400769778214 / 2,
+        0.00006001677793676663 / 2,
+        0.000006250388182138522 / 2,
     ];
 
     main.entrance_path_pos_array_y = [
-        -0.0006251425159220503 / 2,
-        -0.0011989758017136864 / 2 ,
-        -0.0011339912153793819 / 2
+        -0.0014109504749804103 / 2,
+        -0.002098573698830819 / 2 ,
+        -0.0013200220494162807 / 2
     ];
 
     main.entrance_pos_array_x = [
@@ -51,6 +58,31 @@ var Building = function()
         './3dobject/house3/exterior-p0c.gltf'
     ];
 
+    main.img_start_positions_x = [
+        -0.000021055249476376048 / 2,
+        0.00020071241219454805 / 2,
+        0.000003590850738532936 / 2
+    ];
+
+    main.img_start_positions_y = [
+        -0.00001962771442620692 / 2,
+        -0.00020030826985717454 / 2,
+        -0.00025333546893615335 / 2
+    ];
+
+    main.img_end_positions_x = [
+        0.0003314129036482427 / 2,
+        0.00036660239381092197 / 2,
+        0.00028431785312932334 / 2
+    ];
+
+    main.img_end_positions_y = [
+        -0.00019877837249637764 / 2,
+        -0.00020935788758436047 / 2,
+        -0.0002611650705404145 / 2
+    ];
+
+
     main.entrance = null;
 
     main.entrance_pos = null;
@@ -67,9 +99,8 @@ var Building = function()
 
     main.image_position = null;
 
-    main.init = function (scene, dataSource) {
+    main.init = function (scene) {
         main.scene = viewer.scene;
-        main.dataSource = dataSource;
     }
 
     main.setPosition = function (position) {
@@ -97,7 +128,7 @@ var Building = function()
             },
             maximumHeight: 1000,
             complete: function() {
-                main.image.position = main.entrance_pos;
+                // main.image.position = main.entrance_pos;
                 isBuildingZoom = true;
             }
         });
@@ -175,21 +206,13 @@ var Building = function()
     main.setImage = function(number, id, photo_id) {
         var name = "./images/photo_" + photo_id + ".png";
 
-        var dx = 0.00005;
-        var dy = 0.00005;
-        if (number == 0) {
-            dx = 0.00005;
-            dy = 0.00005;
-        }
-        else if (number == 1) {
-            dx = 0.00005;
-            dy = 0.00005;
-        }
+        var dx = main.img_end_positions_x[number] * main.scale;
+        var dy = main.img_end_positions_y[number]* main.scale;
         var length = Math.sqrt(dx * dx + dy * dy);
         var dy1 = Math.sin(- Cesium.Math.toRadians(main.direction) + Math.atan(dy / dx)) * length
         var dx1 = Math.cos(- Cesium.Math.toRadians(main.direction) + Math.atan(dy / dx)) * length
 
-        var position = Cesium.Cartesian3.fromDegrees(main.pos.x + dx1, main.pos.y + dy1, main.height);
+        var position = Cesium.Cartesian3.fromDegrees(main.pos.x + dx1, main.pos.y + dy1, main.height * main.scale);
         main.image_position = position;
         var entity = new Cesium.Entity( {
             position : position,
@@ -202,12 +225,33 @@ var Building = function()
         });
 
         main.image = entity;
+
+        dx = main.img_start_positions_x[number] * main.scale;
+        dy = main.img_start_positions_y [number]* main.scale;
+        length = Math.sqrt(dx * dx + dy * dy);
+        dy1 = Math.sin(- Cesium.Math.toRadians(main.direction) + Math.atan(dy / dx)) * length
+        dx1 = Math.cos(- Cesium.Math.toRadians(main.direction) + Math.atan(dy / dx)) * length
+
+        position = Cesium.Cartesian3.fromDegrees(main.pos.x + dx1, main.pos.y + dy1, main.line_heightArray[number] * main.scale);
+        main.line = new Cesium.Entity({
+            position : position,
+            polyline : {
+                positions : [
+                    main.image_position,
+                    position
+                ],
+                width : new Cesium.ConstantProperty(2),
+                material : Cesium.Color.SKYBLUE,
+                followSurface : new Cesium.ConstantProperty(false)
+            }
+        });
     }
 
     main.draw = function() {
-        main.dataSource.entities.add(main.building);
-        main.dataSource.entities.add(main.image);
-        main.dataSource.entities.add(main.entrance);
+        viewer.entities.add(main.building);
+        viewer.entities.add(main.line);
+        viewer.entities.add(main.image);
+        viewer.entities.add(main.entrance);
     }
 
     main.imageMoveOriginal = function() {
