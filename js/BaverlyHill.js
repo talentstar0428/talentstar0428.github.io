@@ -5,8 +5,8 @@
 var BaverlyHill = function() {
 
     var main                =   this;
-    var city_pos            =   null;
-    var center_Entity       =   null;
+    main.city_pos            =   null;
+    main.center_Entity       =   null;
 
     main.init = function (position){
         main.city_pos       =   position;
@@ -34,6 +34,8 @@ var BaverlyHill = function() {
     main.flyTo = function() {
         viewer.trackedEntity = main.center_Entity;
         // viewer.trackedEntity = undefined;
+
+        showFlying(true);
         viewer.camera.flyToBoundingSphere(
             new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(main.city_pos.x, main.city_pos.y, 400.0), 300),
             {
@@ -43,6 +45,7 @@ var BaverlyHill = function() {
                     isHome = false;
                     isBaverlyHill = true;
                     isNewYork = false;
+                    showFlying(false);
                 },
                 maximumHeight: 10000000,
                 orientation : {

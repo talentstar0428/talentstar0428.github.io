@@ -130,6 +130,7 @@ var Building = function()
             complete: function() {
                 // main.image.position = main.entrance_pos;
                 isBuildingZoom = true;
+                showFlying(false);
             }
         });
 

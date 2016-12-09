@@ -5,12 +5,13 @@
 var NewYorkCity = function() {
 
     var main                =   this;
-    var city_pos            =   null;
-    var center_Entity       =   null;
-    var webMap              =   null;
-    var buildingLayer       =   null;
-    var lotLayer            =   null;
-    var streetLayer         =   null;
+
+    main.city_pos            =   null;
+    main.center_Entity       =   null;
+    main.webMap              =   null;
+    main.buildingLayer       =   null;
+    main.lotLayer            =   null;
+    main.streetLayer         =   null;
 
     main.init = function (position){
         main.city_pos       =   position;
@@ -33,36 +34,53 @@ var NewYorkCity = function() {
     }
 
     main.flyTo = function() {
-        viewer.trackedEntity = main.center_Entity;
+        main.center_Entity.show = false;
+        baverlyHill.center_Entity.show = false;
+        isHome = false;
+        isNewYork = true;
+        isBaverlyHill = false;
+        showFlying(true);
+        main.addLayer();
         // viewer.trackedEntity = undefined;
-        viewer.camera.flyToBoundingSphere(
-            new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(main.city_pos.x, main.city_pos.y, 400.0), 300),
-            {
-            complete: function () {
-                newyork.center_Entity.show = false;
-                baverlyHill.center_Entity.show = false;
-                isHome = false;
-                isNewYork = true;
-                isBaverlyHill = false;
-                
-                // var extent = new Cesium.Rectangle.fromDegrees(-74.2554618991863, 40.4984065460536, -73.6992741782758, 40.9147033697977);
-                // viewer.camera.setView({destination: extent})
+        // viewer.camera.flyToBoundingSphere(
+        //     new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(main.city_pos.x, main.city_pos.y, 400.0), 300),
+        //     {
+        //     complete: function () {
+        //         newyork.center_Entity.show = false;
+        //         baverlyHill.center_Entity.show = false;
+        //         isHome = false;
+        //         isNewYork = true;
+        //         isBaverlyHill = false;
+        //         showFlying(false);
+        //         // var extent = new Cesium.Rectangle.fromDegrees(-74.2554618991863, 40.4984065460536, -73.6992741782758, 40.9147033697977);
+        //         // viewer.camera.setView({destination: extent})
 
-                // main.addLayer();
-            },
-            maximumHeight: 10000000,
-            orientation : {
-                heading: Cesium.Math.toRadians(-60),
-                pitch: Cesium.Math.toRadians(-25.0),
-                roll: 0.0
-            }
-        });
+                
+        //     },
+        //     maximumHeight: 10000000,
+        //     orientation : {
+        //         heading: Cesium.Math.toRadians(-60),
+        //         pitch: Cesium.Math.toRadians(-25.0),
+        //         roll: 0.0
+        //     }
+        // });
     }
     main.addLayer = function() 
     {
         main.addBuildingLayer();
-        // main.addLotLayer();
-        // main.addStreetLayer();
+        main.addLotLayer();
+        main.addStreetLayer();
+        main.buildingLayer.registerEventHandler("FINISHLOADING", function(loadedcitydbLayer) {
+
+            var lat = loadedcitydbLayer._cameraPosition.lat;
+            var lon = loadedcitydbLayer._cameraPosition.lon;
+            main.center_Entity.position = Cesium.Cartesian3.fromDegrees(lon, lat);
+
+            viewer.trackedEntity = main.center_Entity;
+
+            loadedcitydbLayer.zoomToStartPosition();
+        }); 
+        
     }
 
     main.addBuildingLayer = function() 
@@ -72,10 +90,6 @@ var NewYorkCity = function() {
         });
 
         main.webMap.addLayer(main.buildingLayer);
-
-        main.buildingLayer.registerEventHandler("FINISHLOADING", function(loadedcitydbLayer) {
-            loadedcitydbLayer.zoomToStartPosition();
-        }); 
     }
 
     main.addLotLayer = function()
@@ -96,8 +110,10 @@ var NewYorkCity = function() {
 
     main.removeLayers = function()
     {
-        main.webMap.removeLayer(main.buildingLayer.id);
-        main.webMap.removeLayer(main.lotLayer.id);
-        main.webMap.removeLayer(main.streetLayer.id);
+        if (main.buildingLayer) {
+            main.webMap.removeLayer(main.buildingLayer.id);
+            main.webMap.removeLayer(main.lotLayer.id);
+            main.webMap.removeLayer(main.streetLayer.id);
+        }
     }
 }

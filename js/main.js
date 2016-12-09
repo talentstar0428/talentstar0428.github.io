@@ -87,6 +87,7 @@ function gotoNewYork()
 function gotoBeverlyHill() 
 {
     if (isBaverlyHill == false) {
+        newyork.removeLayers();
         street.moveSelectBuildingOrigin();
         baverlyHill.flyTo();
     }
@@ -95,8 +96,10 @@ function gotoBeverlyHill()
 function gotoHome() 
 {
     if (isHome == false) {
+        newyork.removeLayers();
         viewer.trackedEntity = man;
         street.moveSelectBuildingOrigin();
+        showFlying(true);
         viewer.scene.camera.flyToBoundingSphere(
             new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(current_pos.coords.longitude, current_pos.coords.latitude, 400.0), 300),
             {
@@ -107,6 +110,7 @@ function gotoHome()
                     isHome = true;
                     isBaverlyHill = false;
                     isNewYork = false;
+                    showFlying(false);
                 },
                 orientation : {
                     heading: Cesium.Math.toRadians(-60),
@@ -124,7 +128,7 @@ function loadingObject()
         var entity = new Cesium.Entity({
             model: {
                 uri: uri_obj[i],
-                shadows : Cesium.ShadowMode.DISABLED
+                // shadows : Cesium.ShadowMode.DISABLED
             },
         });
         modelingObjects.push(entity);
@@ -178,7 +182,8 @@ function fly(position)
     street.enableSpaceEventHandler(viewer);
     // street.enableCameraMoveEventHandler(viewer);
 
-    newyork.init({x: -73.985130, y: 40.758896});
+    // newyork.init({x: -73.985130, y: 40.758896});
+    newyork.init({x: -73.97736803873105, y: 40.70655495792565});
     newyork.drawPos();
 
     baverlyHill.init({x: -118.401345, y: 34.067806});
@@ -189,9 +194,13 @@ function fly(position)
 
     // street.initEvent();
 
-    this.viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+    this.viewer.geocoder.viewModel.search.beforeExecute.addEventListener(function () {
+        if (viewer.geocoder.viewModel.search.canExecute && viewer.geocoder.viewModel.searchText != "") {
+            showFlying(true);
+        }
+    });
 
-    this.viewer.screenSpaceEventHandler.destroy();
+    this.viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
     function initEventOrientation() 
     {
@@ -255,6 +264,7 @@ function fly(position)
             isNewYork = false;
             street.selectBuilding = -1;
             controller.enableRotate = false;
+            showFlying(false);
         }, undefined)
 
         viewer.geocoder.viewModel._complete = evt;
@@ -318,6 +328,7 @@ function fly(position)
             Cesium.Math.toDegrees(cartographicPosition.latitude));
         viewer.trackedEntity = doubleTapEntity;
 
+        showFlying(true);
         viewer.scene.camera.flyToBoundingSphere(
             new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(Cesium.Math.toDegrees(cartographicPosition.longitude)
                 , Cesium.Math.toDegrees(cartographicPosition.latitude), 100.0), 50),
@@ -327,20 +338,37 @@ function fly(position)
                     isBaverlyHill = false;
                     isNewYork = false;
                     street.selectBuilding = -1;
+                    showFlying(false);
                 },
             });
     }
 
+    showFlying(true);
     viewer.scene.camera.flyToBoundingSphere(
             new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude, 400.0), 300),
             {
-                complete: initEventOrientation,
+                complete: function() {
+                    showFlying(false);
+                    initEventOrientation();
+                },
                 orientation : {
                     heading: Cesium.Math.toRadians(-60),
                     pitch: Cesium.Math.toRadians(-25.0),
                     roll: 0.0
                 }
             });
+}
+
+function showFlying(enable)
+{
+    if (enable) 
+    {
+        jQuery("#logo").show(250);
+    }
+    else
+    {
+        jQuery("#logo").hide(250);
+    }
 }
 
 function main() 

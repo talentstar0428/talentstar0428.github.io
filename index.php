@@ -56,6 +56,10 @@
                 <button id="BeverlyHill" class="abs_btn" onclick="gotoBeverlyHill()">Beverly Hills</button>
             </div>
 
+            <div id="logo">
+                <image id="freevi" src="images/flightdeck-logo.png"/>
+            </div>
+
             <div id="home_area">
                 <img src="./images/home.png" id="Home" alt="Home" onclick="gotoHome()" />
             </div>

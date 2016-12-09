@@ -61,8 +61,6 @@ var Touch = function () {
 
 			var xDiff	=	xUp - main.xDown;
 			var yDiff	=	yUp - main.yDown;
-			console.log(xDiff);
-			console.log(yDiff)
 			if (Math.abs(xDiff) > Math.abs(yDiff)) {
 				main.horizontalFunc(xDiff);
 			}

@@ -82,6 +82,7 @@
     var ScaledPositionProperty = Cesium.ScaledPositionProperty;
     var TimeIntervalCollectionProperty = Cesium.TimeIntervalCollectionProperty;
     var WallGraphics = Cesium.WallGraphics;
+    var EntityCluster = Cesium.EntityCluster;
 
     // IE 8 doesn't have a DOM parser and can't run Cesium anyway, so just bail.
     if (typeof DOMParser === 'undefined') {
@@ -1743,6 +1744,7 @@
         this._promises = [];
         this._layerId = layerId;
         this._lookAt = null;
+        this._entityCluster = new EntityCluster();
     };
 
     /**
@@ -1832,6 +1834,18 @@
         loadingEvent : {
             get : function() {
                 return this._loading;
+            }
+        },
+        //added 20161210
+        clustering : {
+            get : function() {
+                return this._entityCluster;
+            },
+            set : function(value) {
+                                if (!defined(value)) {
+                    throw new DeveloperError('value must be defined.');
+                }
+                                this._entityCluster = value;
             }
         }
     });

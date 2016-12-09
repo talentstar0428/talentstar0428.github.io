@@ -62,7 +62,7 @@
 		this._maxCountOfVisibleTiles = Cesium.defaultValue(options.maxCountOfVisibleTiles, 200);		
     	this._minLodPixels = Cesium.defaultValue(options.minLodPixels, undefined);
     	this._maxLodPixels = Cesium.defaultValue(options.maxLodPixels,  undefined);		
-		this._citydbKmlDataSource = new CitydbKmlDataSource(this._id);			
+		this._citydbKmlDataSource = new CitydbKmlDataSource(this._id);
 		this._activeHighlighting = Cesium.defaultValue(options.activeHighlighting, true);	
 		this._citydbKmlHighlightingManager = this._activeHighlighting? new CitydbKmlHighlightingManager(this): null;		
 		this._citydbKmlTilingManager = new CitydbKmlTilingManager(this);
@@ -425,9 +425,14 @@
         var cesiumCamera = this._cesiumViewer.scene.camera;
         cesiumCamera.flyTo({
             destination : Cesium.Cartesian3.fromDegrees(lon, lat, range),
+            maximumHeight: 10000000,
             complete: function() {
+            	//added 20161210
+            	showFlying(false);
+            	
             	cesiumCamera.lookAt(center, new Cesium.HeadingPitchRange(heading, pitch, range));
-            	cesiumCamera.lookAtTransform(Cesium.Matrix4.IDENTITY); 
+            	//remove 20161210
+            	// cesiumCamera.lookAtTransform(Cesium.Matrix4.IDENTITY); 
             	setTimeout(function(){
             		that._citydbKmlTilingManager.triggerWorker();
             	}, 3000)            	
