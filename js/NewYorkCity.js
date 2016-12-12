@@ -37,7 +37,7 @@ var NewYorkCity = function() {
 
         viewer.trackedEntity = main.center_Entity;
         viewer.camera.flyToBoundingSphere(
-            new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(main.city_pos.x, main.city_pos.y, 400.0), 300),
+            new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(main.city_pos.x, main.city_pos.y, 300.0), 200),
             {
             complete: function () {
                 main.center_Entity.show = false;

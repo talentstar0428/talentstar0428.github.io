@@ -17,7 +17,7 @@ var StreetView = function()
         main.scene = viewer.scene;
     }
 
-    main.selectBuilding = 0;
+    main.selectBuilding = -1;
 
     main.dispObject = function() {
 

@@ -226,7 +226,10 @@ function fly(position)
         eventHandler.setInputAction(function(wheelZoomAmount){
             if (viewer.camera.direction.z > 0 && wheelZoomAmount < 0) {
                 var heading = -60.0;
-                if (street.selectBuilding != -1) heading = street.buildings[street.selectBuilding].direction;
+                if (street.selectBuilding != -1) {
+                    heading = street.buildings[street.selectBuilding].direction;
+                    street.moveSelectBuildingOrigin();
+                }
                 viewer.camera.setView({
                     orientation : {
                         heading: Cesium.Math.toRadians(heading),
@@ -242,7 +245,10 @@ function fly(position)
             var curDiff = movement.distance.endPosition.y - movement.distance.startPosition.y;
             if (viewer.camera.direction.z > 0 && curDiff < 0) {
                 var heading = -60.0;
-                if (street.selectBuilding != -1) heading = street.buildings[street.selectBuilding].direction;
+                if (street.selectBuilding != -1) {
+                    heading = street.buildings[street.selectBuilding].direction;
+                    street.moveSelectBuildingOrigin();
+                }
                 viewer.camera.setView({
                     orientation : {
                         heading: Cesium.Math.toRadians(heading),
@@ -314,6 +320,11 @@ function fly(position)
 
     function onLeftSwipe(diff) 
     {
+        console.log(street.selectBuilding);
+        if (street.selectBuilding != -1) {
+            viewer.camera.rotateLeft(Cesium.Math.toDegrees(0.0008));
+            return;
+        }
         var center = getCameraFocusPosition();
         var frame = Cesium.Transforms.eastNorthUpToFixedFrame(center);
         var oldTransform = Cesium.Matrix4.clone(viewer.camera.transform);
@@ -324,6 +335,11 @@ function fly(position)
 
     function onRightSwipe(diff) 
     {
+        console.log(street.selectBuilding);
+        if (street.selectBuilding != -1) {
+            viewer.camera.rotateRight(Cesium.Math.toDegrees(0.0008));
+            return;    
+        }
         var center = getCameraFocusPosition();
         var frame = Cesium.Transforms.eastNorthUpToFixedFrame(center);
         var oldTransform = Cesium.Matrix4.clone(viewer.camera.transform);
