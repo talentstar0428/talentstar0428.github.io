@@ -24,7 +24,7 @@ var BaverlyHill = function() {
             // },
             model: {
                 uri: "./3dobject/BeverlyHills/BeverlyHills_beforeTS.gltf",
-                shadows : Cesium.ShadowMode.DISABLED,
+                shadows : Cesium.ShadowMode.RECEIVE_ONLY,
                 scale: 0.3
             },
             show : false

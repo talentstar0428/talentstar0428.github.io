@@ -62,6 +62,8 @@ var viewDirection                       = null;
 
 var isBuildingZoom                      = false;
 
+var webMap                              = null;
+
 function handleOrientation(event) 
 {
 
@@ -147,7 +149,15 @@ function onMouseUp(event)
 
 function fly(position) 
 {
+    webMap = new WebMap3DCityDB(viewer);
+
+    webMap.activateViewChangedEvent(true);
+    webMap.activateMouseClickEvents(true);
+    webMap.activateMouseMoveEvents(true);
+
     current_pos                         = position;
+
+    // viewer.scene.globe.enableLighting = true;
 
     man = new Cesium.Entity(
     {
@@ -183,7 +193,7 @@ function fly(position)
     // street.enableCameraMoveEventHandler(viewer);
 
     // newyork.init({x: -73.985130, y: 40.758896});
-    newyork.init({x: -73.97736803873105, y: 40.70655495792565});
+    newyork.init({x: -73.98774263868867, y: 40.74337478856652});
     newyork.drawPos();
 
     baverlyHill.init({x: -118.401345, y: 34.067806});
@@ -292,15 +302,34 @@ function fly(position)
             onUpMove(diff);
     }
 
-    function onLeftSwipe(diff) 
-    {   
-        viewer.camera.rotateLeft(Cesium.Math.toDegrees(0.0008));
+    function getCameraFocusPosition() {
+        var rayScratch = new Cesium.Ray();
+        rayScratch.origin = viewer.camera.positionWC;
+        rayScratch.direction = viewer.camera.directionWC;
+        var result = new Cesium.Cartesian3();
+        result = viewer.scene.globe.pick(rayScratch, viewer.scene, result);
+        console.log(result);
+        return result;
+    }
 
+    function onLeftSwipe(diff) 
+    {
+        var center = getCameraFocusPosition();
+        var frame = Cesium.Transforms.eastNorthUpToFixedFrame(center);
+        var oldTransform = Cesium.Matrix4.clone(viewer.camera.transform);
+        viewer.camera.lookAtTransform(frame);
+        viewer.camera.rotateLeft(Cesium.Math.toDegrees(0.0008));
+        viewer.camera.lookAtTransform(oldTransform);
     }
 
     function onRightSwipe(diff) 
     {
+        var center = getCameraFocusPosition();
+        var frame = Cesium.Transforms.eastNorthUpToFixedFrame(center);
+        var oldTransform = Cesium.Matrix4.clone(viewer.camera.transform);
+        viewer.camera.lookAtTransform(frame);
         viewer.camera.rotateRight(Cesium.Math.toDegrees(0.0008));
+        viewer.camera.lookAtTransform(oldTransform);
     }
 
     function onUpMove(diff) 
