@@ -95,9 +95,7 @@ var StreetView = function()
         var cartographicPosition = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
 
         // document.getElementById('longitude').textContent = Cesium.Math.toDegrees(cartographicPosition.longitude);
-
         // document.getElementById('latitude').textContent = Cesium.Math.toDegrees(cartographicPosition.latitude);
-
     }
 
     main.enableSpaceEventHandler = function(viewer) {

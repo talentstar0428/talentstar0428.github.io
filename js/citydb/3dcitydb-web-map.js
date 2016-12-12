@@ -211,6 +211,7 @@
 			var that = this;
 			this._eventHandler.setInputAction(function(event){
 				var object = that._cesiumViewerInstance.scene.pick(event.position);
+				console.log(object);
 				that.passEventToLayer("CLICK", object);
 			}, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 			this._eventHandler.setInputAction(function(event){

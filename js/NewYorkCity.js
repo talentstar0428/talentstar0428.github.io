@@ -10,7 +10,6 @@ var NewYorkCity = function() {
     main.center_Entity      =   null;
 
     main.buildingLayer      =   null;
-    main.lotLayer           =   null;
     main.streetLayer        =   null;
 
     main.prefixUrl          =   "http://www.3dcitydb.net/3dcitydb/fileadmin/mydata/Cesium_NYC_Demo/";
@@ -37,7 +36,7 @@ var NewYorkCity = function() {
 
         viewer.trackedEntity = main.center_Entity;
         viewer.camera.flyToBoundingSphere(
-            new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(main.city_pos.x, main.city_pos.y, 300.0), 200),
+            new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(main.city_pos.x, main.city_pos.y, 100.0), 200),
             {
             complete: function () {
                 main.center_Entity.show = false;
@@ -60,8 +59,8 @@ var NewYorkCity = function() {
     main.addLayer = function() 
     {
         main.addBuildingLayer();
-        main.addLotLayer();
         main.addStreetLayer();
+        // main.addLotLayer();
     }
 
     main.addBuildingLayer = function() 
@@ -71,22 +70,11 @@ var NewYorkCity = function() {
             minLodPixels : 140,
             maxLodPixels : 1.7976931348623157e+308,
             maxSizeOfCachedTiles : 50,
-            maxCountOfVisibleTiles : 200
+            maxCountOfVisibleTiles : 200,
+            thematicDataUrl : "https://www.google.com/fusiontables/DataSource?docid=1ivFBfqsnkv5OlvkQUybgfOSjIz_u9_98_mmJVUss#rows:id=1"
         });
 
         webMap.addLayer(main.buildingLayer);
-    }
-
-    main.addLotLayer = function()
-    {
-        main.lotLayer = new CitydbKmlLayer({
-            url : main.prefixUrl + "NYK_Landuse_Footprint/NYK_Landuse_Footprint_MasterJSON_NoJSONP.json",
-            minLodPixels : 140,
-            maxLodPixels : 1.7976931348623157e+308,
-            maxSizeOfCachedTiles : 50,
-            maxCountOfVisibleTiles : 200
-        });
-        webMap.addLayer(main.lotLayer);
     }
 
     main.addStreetLayer = function() 
@@ -96,7 +84,8 @@ var NewYorkCity = function() {
             minLodPixels : 140,
             maxLodPixels : 1.7976931348623157e+308,
             maxSizeOfCachedTiles : 50,
-            maxCountOfVisibleTiles : 200
+            maxCountOfVisibleTiles : 200,
+            thematicDataUrl : "https://www.google.com/fusiontables/data?docid=1qLk_S4yxma0MI1LmISc8DdLn_NdhrFb784Mwizas#rows:id=1"
         });
         webMap.addLayer(main.streetLayer);
     }
@@ -105,7 +94,6 @@ var NewYorkCity = function() {
     {
         if (main.buildingLayer) {
             webMap.removeLayer(main.buildingLayer.id);
-            webMap.removeLayer(main.lotLayer.id);
             webMap.removeLayer(main.streetLayer.id);
         }
     }

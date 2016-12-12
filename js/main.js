@@ -153,7 +153,6 @@ function fly(position)
 
     webMap.activateViewChangedEvent(true);
     webMap.activateMouseClickEvents(true);
-    webMap.activateMouseMoveEvents(true);
 
     current_pos                         = position;
 
@@ -314,18 +313,20 @@ function fly(position)
         rayScratch.direction = viewer.camera.directionWC;
         var result = new Cesium.Cartesian3();
         result = viewer.scene.globe.pick(rayScratch, viewer.scene, result);
-        console.log(result);
         return result;
     }
 
     function onLeftSwipe(diff) 
     {
-        console.log(street.selectBuilding);
         if (street.selectBuilding != -1) {
             viewer.camera.rotateLeft(Cesium.Math.toDegrees(0.0008));
             return;
         }
         var center = getCameraFocusPosition();
+        if (center == undefined) {
+            viewer.camera.rotateLeft(Cesium.Math.toDegrees(0.0008));
+            return;
+        }
         var frame = Cesium.Transforms.eastNorthUpToFixedFrame(center);
         var oldTransform = Cesium.Matrix4.clone(viewer.camera.transform);
         viewer.camera.lookAtTransform(frame);
@@ -335,12 +336,15 @@ function fly(position)
 
     function onRightSwipe(diff) 
     {
-        console.log(street.selectBuilding);
         if (street.selectBuilding != -1) {
             viewer.camera.rotateRight(Cesium.Math.toDegrees(0.0008));
             return;    
         }
         var center = getCameraFocusPosition();
+        if (center == undefined) {
+            viewer.camera.rotateLeft(Cesium.Math.toDegrees(0.0008));
+            return;
+        }
         var frame = Cesium.Transforms.eastNorthUpToFixedFrame(center);
         var oldTransform = Cesium.Matrix4.clone(viewer.camera.transform);
         viewer.camera.lookAtTransform(frame);
