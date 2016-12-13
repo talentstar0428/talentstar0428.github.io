@@ -35,26 +35,35 @@ var NewYorkCity = function() {
         showFlying(true);
 
         viewer.trackedEntity = main.center_Entity;
-        viewer.camera.flyToBoundingSphere(
-            new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(main.city_pos.x, main.city_pos.y, 100.0), 200),
-            {
-            complete: function () {
-                main.center_Entity.show = false;
-                baverlyHill.center_Entity.show = false;
-                isHome = false;
-                isNewYork = true;
-                isBaverlyHill = false;
-                showFlying(false);
+        main.center_Entity.show = false;
+        baverlyHill.center_Entity.show = false;
+        isHome = false;
+        isNewYork = true;
+        isBaverlyHill = false;
+        showFlying(false);
 
-                main.addLayer();
-            },
-            maximumHeight: 10000000,
-            orientation : {
-                heading: Cesium.Math.toRadians(-60),
-                pitch: Cesium.Math.toRadians(-25.0),
-                roll: 0.0
-            }
-        });
+        main.addLayer();
+
+        // viewer.camera.flyToBoundingSphere(
+        //     new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(main.city_pos.x, main.city_pos.y, 100.0), 200),
+        //     {
+        //     complete: function () {
+        //         main.center_Entity.show = false;
+        //         baverlyHill.center_Entity.show = false;
+        //         isHome = false;
+        //         isNewYork = true;
+        //         isBaverlyHill = false;
+        //         showFlying(false);
+
+        //         main.addLayer();
+        //     },
+        //     maximumHeight: 10000000,
+        //     orientation : {
+        //         heading: Cesium.Math.toRadians(-60),
+        //         pitch: Cesium.Math.toRadians(-25.0),
+        //         roll: 0.0
+        //     }
+        // });
     }
     main.addLayer = function() 
     {
@@ -66,21 +75,26 @@ var NewYorkCity = function() {
     main.addBuildingLayer = function() 
     {
         main.buildingLayer = new CitydbKmlLayer({
-            url : main.prefixUrl + "NYK_Building_Extruded/NYK_Building_Extruded_MasterJSON_NoJSONP.json",
+            // url : main.prefixUrl + "NYK_Building_Extruded/NYK_Building_Extruded_MasterJSON_NoJSONP.json",
+            url : "./data/Buildings/NYC_Manhattan_Buildings_extruded_MasterJSON.json",
             minLodPixels : 140,
             maxLodPixels : 1.7976931348623157e+308,
             maxSizeOfCachedTiles : 50,
             maxCountOfVisibleTiles : 200,
             thematicDataUrl : "https://www.google.com/fusiontables/DataSource?docid=1ivFBfqsnkv5OlvkQUybgfOSjIz_u9_98_mmJVUss#rows:id=1"
         });
-
         webMap.addLayer(main.buildingLayer);
+
+        main.buildingLayer.registerEventHandler("FINISHLOADING", function(loadedcitydbLayer) {
+            loadedcitydbLayer.zoomToStartPosition();
+        });
     }
 
     main.addStreetLayer = function() 
     {
         main.streetLayer = new CitydbKmlLayer({
-            url : main.prefixUrl + "NYK_Street_Footprint/NYK_Street_Footprint_MasterJSON_NoJSONP.json",
+            // url : main.prefixUrl + "NYK_Street_Footprint/NYK_Street_Footprint_MasterJSON_NoJSONP.json",
+            url : "./data/Streets/NYC_Manhattan_Streets_footprint_MasterJSON.json",
             minLodPixels : 140,
             maxLodPixels : 1.7976931348623157e+308,
             maxSizeOfCachedTiles : 50,
