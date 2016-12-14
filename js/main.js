@@ -15,6 +15,11 @@ var viewer                          = new Cesium.Viewer('cesiumContainer', {
                                             url : 'https://stamen-tiles.a.ssl.fastly.net/watercolor/',
                                             fileExtension: 'png'
                                         }),
+                                        terrainProvider : new Cesium.CesiumTerrainProvider({
+                                            url : 'https://assets.agi.com/stk-terrain/v1/tilesets/PAMAP/tiles',
+                                            requestWaterMask : true,
+                                            requestVertexNormals : true
+                                        }),
                                         infoBox : false,
                                         sceneModePicker : false,
                                     });
@@ -218,8 +223,9 @@ function fly(position)
 
         viewDirection = viewer.camera.direction;
         var controller = viewer.scene.screenSpaceCameraController;
+        
         controller.enableRotate = false;
-        // viewer.scene.screenSpaceCameraController.enableZoom = false;
+        // controller.enableZoom = false;
 
         var eventHandler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
         eventHandler.setInputAction(function(wheelZoomAmount){
@@ -237,7 +243,40 @@ function fly(position)
                     }
                 });
             }
+            // var position = new Cesium.Cartographic(viewer.camera.positionCartographic.longitude, 
+            //     viewer.camera.positionCartographic.latitude);
 
+            // getGroundHeight([position], function(cartoPosition) {
+            //     var height = viewer.camera.positionCartographic.height;
+            //     var limitHeight = cartoPosition[0].height;
+            //     if (height < limitHeight + 100 && wheelZoomAmount > 0) {
+            //         return;
+            //     }
+            //     else {
+            //         if (wheelZoomAmount > 0) {
+            //             viewer.camera.zoomIn(200);
+            //         }
+            //         else {
+            //             if (viewer.camera.direction.z > 0 && wheelZoomAmount < 0) {
+            //                 var heading = -60.0;
+            //                 if (street.selectBuilding != -1) {
+            //                     heading = street.buildings[street.selectBuilding].direction;
+            //                     street.moveSelectBuildingOrigin();
+            //                 }
+            //                 viewer.camera.setView({
+            //                     orientation : {
+            //                         heading: Cesium.Math.toRadians(heading),
+            //                         pitch: Cesium.Math.toRadians(-25.0),
+            //                         roll: 0.0
+            //                     }
+            //                 });
+            //             }
+            //             else {
+            //                 viewer.camera.zoomOut(200);
+            //             }
+            //         }
+            //     }
+            // });
         }, Cesium.ScreenSpaceEventType.WHEEL);
 
         eventHandler.setInputAction(function(movement){
@@ -256,6 +295,41 @@ function fly(position)
                     }
                 });
             }
+            // var position = new Cesium.Cartographic(viewer.camera.positionCartographic.longitude, 
+            //     viewer.camera.positionCartographic.latitude);
+
+            // getGroundHeight([position], function(cartoPosition) {
+            //     var height = viewer.camera.positionCartographic.height;
+            //     var limitHeight = cartoPosition[0].height;
+            //     var curDiff = movement.distance.endPosition.y - movement.distance.startPosition.y;
+            //     if (height < limitHeight + 100 && curDiff > 0) {
+            //         return;
+            //     }
+            //     else {
+            //         if (curDiff > 0) {
+            //             viewer.camera.zoomIn(200);
+            //         }
+            //         else {
+            //             if (viewer.camera.direction.z > 0 && curDiff < 0) {
+            //                 var heading = -60.0;
+            //                 if (street.selectBuilding != -1) {
+            //                     heading = street.buildings[street.selectBuilding].direction;
+            //                     street.moveSelectBuildingOrigin();
+            //                 }
+            //                 viewer.camera.setView({
+            //                     orientation : {
+            //                         heading: Cesium.Math.toRadians(heading),
+            //                         pitch: Cesium.Math.toRadians(-25.0),
+            //                         roll: 0.0
+            //                     }
+            //                 });
+            //             }
+            //             else {
+            //                 viewer.camera.zoomOut(200);
+            //             }
+            //         }
+            //     }
+            // });
         }, Cesium.ScreenSpaceEventType.PINCH_MOVE);
 
         var evt = new Cesium.Event();
@@ -418,6 +492,14 @@ function showFlying(enable)
     {
         jQuery("#logo").hide(250);
     }
+}
+
+function getGroundHeight(positions, process) {
+    var promise = Cesium.sampleTerrain(viewer.terrainProvider, 11, positions);
+
+    Cesium.when(promise, function (cartoPosition) {
+        process(cartoPosition);
+    });
 }
 
 function main() 

@@ -115,8 +115,8 @@ var StreetView = function()
     main.onDocumentMouseClick = function (event) {
         var position = viewer.camera.pickEllipsoid({x:event.clientX, y:event.clientY});
         var cartographicPosition = Cesium.Ellipsoid.WGS84.cartesianToCartographic(position);
-        console.log(Cesium.Math.toDegrees(cartographicPosition.longitude) - main.buildings[main.selectBuilding].pos.x);
-        console.log(Cesium.Math.toDegrees(cartographicPosition.latitude) - main.buildings[main.selectBuilding].pos.y);
+        // console.log(Cesium.Math.toDegrees(cartographicPosition.longitude) - main.buildings[main.selectBuilding].pos.x);
+        // console.log(Cesium.Math.toDegrees(cartographicPosition.latitude) - main.buildings[main.selectBuilding].pos.y);
     }
 
     main.moveSelectBuildingOrigin = function ()
