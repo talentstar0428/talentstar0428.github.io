@@ -156,8 +156,9 @@ function fly(position)
 {
     webMap = new WebMap3DCityDB(viewer);
 
-    webMap.activateViewChangedEvent(true);
-    webMap.activateMouseClickEvents(true);
+    // webMap.activateMouseClickEvents(true);
+    webMap.activateMouseMoveEvents(true);
+    // webMap.activateViewChangedEvent(true);
 
     current_pos                         = position;
 
@@ -495,7 +496,7 @@ function showFlying(enable)
 }
 
 function getGroundHeight(positions, process) {
-    var promise = Cesium.sampleTerrain(viewer.terrainProvider, 11, positions);
+    var promise = Cesium.sampleTerrain(viewer.terrainProvider, 3, positions);
 
     Cesium.when(promise, function (cartoPosition) {
         process(cartoPosition);
