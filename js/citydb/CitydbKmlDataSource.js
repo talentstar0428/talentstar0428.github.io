@@ -283,6 +283,25 @@
         return Cartesian3.fromDegrees(longitude, latitude, height);
     }
 
+    //added 20161219
+    function readCoordinateHeight(value) {
+        if (!defined(value)) {
+            return undefined;
+        }
+
+        var digits = value.match(/[^\s,\n]+/g);
+        if (digits.length !== 2 && digits.length !== 3) {
+            window.console.log('KML - Invalid coordinates: ' + value);
+            return undefined;
+        }
+
+        var height = parseFloat(digits[2]);
+
+        height = isNaN(height) ? 0.0 : height;
+
+        return height;
+    }
+
     function readCoordinates(element) {
         if (!defined(element)) {
             return undefined;
@@ -296,6 +315,23 @@
             result[resultIndex++] = readCoordinate(tuples[i]);
         }
         return result;
+    }
+
+    //added 20161219
+    function getCoordinatesHeight(element) {
+        if (!defined(element)) {
+            return undefined;
+        }
+
+        var tuples = element.textContent.match(/[^\s\n]+/g);
+        var length = tuples.length;
+        var height = 0;
+
+        for (var i = 0; i < length; i++) {
+            var evaluateHeight = readCoordinateHeight(tuples[i]);
+            if (height < evaluateHeight) height = evaluateHeight;
+        }
+        return height;
     }
 
     var kmlNamespaces = [null, undefined, 'http://www.opengis.net/kml/2.2', 'http://earth.google.com/kml/2.2', 'http://earth.google.com/kml/2.1', 'http://earth.google.com/kml/2.0'];
@@ -961,6 +997,17 @@
         }
     }
 
+    //added 20161219 andstar
+    function getHeightColor(height) {
+        if (height < 1) return Cesium.Color.WHITE;
+        else if (height < 10) return Cesium.Color.CORNFLOWERBLUE ;
+        else if (height < 30) return Cesium.Color.CORAL ;
+        else if (height < 50) return Cesium.Color.CHOCOLATE ;
+        else if (height < 70) return Cesium.Color.CHARTREUSE ;
+        else if (height < 100) return Cesium.Color.CADETBLUE ;
+        else return Cesium.Color.AQUA;
+    }
+
     function processPolygon(dataSource, geometryNode, entity, styleEntity) {
         var outerBoundaryIsNode = queryFirstNode(geometryNode, 'outerBoundaryIs', namespaces.kml);
         var linearRingNode = queryFirstNode(outerBoundaryIsNode, 'LinearRing', namespaces.kml);
@@ -986,19 +1033,30 @@
         }
 
         if (defined(coordinates)) {
+            //added 20161219 andstar
+            var height = 0;
             var hierarchy = new PolygonHierarchy(coordinates);
+            //added 20161219
+            height = getCoordinatesHeight(coordinatesNode);
+
             var innerBoundaryIsNodes = queryChildNodes(geometryNode, 'innerBoundaryIs', namespaces.kml);
             for (var j = 0; j < innerBoundaryIsNodes.length; j++) {
                 linearRingNode = queryChildNodes(innerBoundaryIsNodes[j], 'LinearRing', namespaces.kml);
                 for (var k = 0; k < linearRingNode.length; k++) {
                     coordinatesNode = queryFirstNode(linearRingNode[k], 'coordinates', namespaces.kml);
                     coordinates = readCoordinates(coordinatesNode);
+                    //added 20161219 andstar
+                    var evaluateheight = getCoordinatesHeight(coordinatesNode);
+                    if (evaluateheight > height) height = evaluateheight;
+                    //end
                     if (defined(coordinates)) {
                         hierarchy.holes.push(new PolygonHierarchy(coordinates));
                     }
                 }
             }
             polygon.hierarchy = hierarchy;
+            //added 20161219 andstar
+            polygon.material = getHeightColor(height);
         }
     }
 

@@ -69,6 +69,7 @@ var NewYorkCity = function() {
     {
         main.addBuildingLayer();
         main.addStreetLayer();
+        main.addEventListener(main.buildingLayer);
         // main.addLotLayer();
     }
 
@@ -110,5 +111,142 @@ var NewYorkCity = function() {
             webMap.removeLayer(main.buildingLayer.id);
             webMap.removeLayer(main.streetLayer.id);
         }
+    }
+
+    main.addEventListener = function(citydbKmlLayer) {
+        var highlightColor = new Cesium.Color(0.4, 0.4, 0.0, 1.0);
+        var mouseOverhighlightColor = new Cesium.Color(0.0, 0.3, 0.0, 1.0);
+        var mainMouseOverhighlightColor = new Cesium.Color(0.0, 0.4, 0.0, 1.0);
+        var subMouseOverhighlightColor = new Cesium.Color(0.0, 0.5, 0.0, 1.0);
+
+        // citydbKmlLayer.registerEventHandler("CLICK", function(object) {         
+        //     var targetEntity = object.id;
+        //     var primitive = object.primitive;
+        //     console.log(citydbKmlLayer);
+        //     console.log(primitive);
+
+        //     var globeId = targetEntity.name; 
+            
+        //     if (citydbKmlLayer.isInHighlightedList(globeId))
+        //         return; 
+        //     // clear all other Highlighting status and just highlight the clicked object...
+        //     citydbKmlLayer.unHighlightAllObjects();       
+
+        //     var highlightThis = {};
+            
+        //     highlightThis[globeId] = highlightColor;
+        //     citydbKmlLayer.highlight(highlightThis);                        
+        // });
+
+        citydbKmlLayer.registerEventHandler("MOUSEIN", function(object) {
+            var targetEntity = object.id;
+
+            var thematicDataUrl = citydbKmlLayer.thematicDataUrl;  
+            // var promise = fetchDataFromGoogleFusionTable(targetEntity.name, thematicDataUrl);
+
+            var primitive = object.primitive;
+            
+            if (citydbKmlLayer.isInHighlightedList(targetEntity.name))
+                return;
+            
+            if (primitive instanceof Cesium.Model) {                
+                var materials = object.mesh._materials;
+                for (var i = 0; i < materials.length; i++) {
+                    // do mouseOver highlighting
+                    materials[i].setValue('emission', Cesium.Cartesian4.fromColor(mouseOverhighlightColor));
+                } 
+            }
+            else if (primitive instanceof Cesium.Primitive) {   
+                try{
+                    var parentEntity = targetEntity._parent;    
+                    var childrenEntities = parentEntity._children;                      
+                }
+                catch(e){return;} // not valid entities
+                main._doMouseoverHighlighting(childrenEntities, primitive, mouseOverhighlightColor);
+            }
+        });
+        
+        citydbKmlLayer.registerEventHandler("MOUSEOUT", function(object) {
+            var primitive = object.primitive;
+            var targetEntity = object.id;
+            if (citydbKmlLayer.isInHighlightedList(targetEntity.name))
+                return; 
+            if (primitive instanceof Cesium.Model) {                
+                var materials = object.mesh._materials;
+                for (var i = 0; i < materials.length; i++) {
+                    // dismiss highlighting
+                    materials[i].setValue('emission', new Cesium.Cartesian4(0.0, 0.0, 0.0, 1));
+                } 
+            }
+            else if (primitive instanceof Cesium.Primitive) {               
+                try{
+                    var parentEntity = targetEntity._parent;    
+                    var childrenEntities = parentEntity._children;      
+                    
+                }
+                catch(e){return;} // not valid entities
+                main._dismissMouseoverHighlighting(childrenEntities, primitive); 
+            }
+        });
+        
+        // citydbKmlLayer.registerEventHandler("VIEWCHANGED", function(object) {
+        //     if (object == undefined) return;
+        //     var primitive = object.primitive;
+        //     var targetEntity = object.id;
+        //     console.log(targetEntity.name);
+        // });
+    }
+
+    main._dismissMouseoverHighlighting = function(_childrenEntities, _primitive) {
+        for (var i = 0; i < _childrenEntities.length; i++){ 
+            var childEntity = _childrenEntities[i]; 
+            var originalSurfaceColor = childEntity.originalSurfaceColor;
+            try{
+                var attributes = _primitive.getGeometryInstanceAttributes(childEntity);
+                attributes.color = originalSurfaceColor; 
+            }
+            catch(e){
+                console.log(e);
+                /* escape the DeveloperError exception: "This object was destroyed..." */
+            }
+        }
+    }
+
+    main._doMouseoverHighlighting = function(_childrenEntities, _primitive, _mouseOverhighlightColor) {
+        for (var i = 0; i < _childrenEntities.length; i++){ 
+            var childEntity = _childrenEntities[i];                         
+            var attributes = _primitive.getGeometryInstanceAttributes(childEntity);
+            if (!Cesium.defined(childEntity.originalSurfaceColor)) {
+                childEntity.addProperty("originalSurfaceColor");
+            }                       
+            childEntity.originalSurfaceColor = attributes.color;
+            attributes.color = Cesium.ColorGeometryInstanceAttribute.toValue(_mouseOverhighlightColor); 
+        }
+    }
+
+    function fetchDataFromGoogleFusionTable(gmlid, thematicDataUrl) {
+        var kvp = {};
+        var deferred = Cesium.when.defer();
+        
+        var tableID = CitydbUtil.parse_query_string('docid', thematicDataUrl);      
+        var sql = "sql=SELECT * FROM " + tableID + " WHERE GMLID = '" + gmlid + "'";
+        var apiKey = "AIzaSyAm9yWCV7JPCTHCJut8whOjARd7pwROFDQ";     
+        var queryLink = "https://www.googleapis.com/fusiontables/v2/query?" + sql + "&key=" + apiKey;   
+
+        Cesium.loadJson(queryLink).then(function(data) {
+            console.log(data);
+            var columns = data.columns;
+            var rows = data.rows;
+            for (var i = 0; i < columns.length; i++) {
+                var key = columns[i];
+                var value = rows[0][i];
+                kvp[key] = value;
+            }
+            console.log(kvp);
+            deferred.resolve(kvp);
+        }).otherwise(function(error) {
+            deferred.reject(error);
+        });
+        return deferred.promise;
     }
 }

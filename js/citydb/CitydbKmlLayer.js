@@ -383,7 +383,7 @@
 	 * showObjects, to undo hideObjects
 	 * @param {Array<String>} A list of Object Ids which will be unhidden. 
 	 */
-	CitydbKmlLayer.prototype.showObjects = function(toUnhide){		
+	CitydbKmlLayer.prototype.showObjects = function(toUnhide){
 		for (var k = 0; k < toUnhide.length; k++){	
 			var objectId = toUnhide[k];			
 			this._hiddenObjects.splice(objectId, 1);	

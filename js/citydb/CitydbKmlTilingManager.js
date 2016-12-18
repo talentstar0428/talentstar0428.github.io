@@ -115,7 +115,8 @@ var GlobeTileTaskQueue = {};
 		scope.oTask.triggerEvent('createMatrix', bbox, rowDelta, colDelta, rownum, colnum);	
 		
 		// create the master bounding box 
-		scope.createBboxGeometry(bbox);    			
+		//marked 20161216
+		// scope.createBboxGeometry(bbox);    			
 
 		//------------------------------below are the relevant listeners call from the worker--------------------------------//
 

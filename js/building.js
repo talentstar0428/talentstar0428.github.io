@@ -150,7 +150,6 @@ var Building = function()
         getGroundHeight([positions], function(cartoPosition) {
             var ellipsoid = Cesium.Ellipsoid.WGS84;
             var height = cartoPosition[0].height;
-            console.log(height);
             var entity = new Cesium.Entity({
                 position : Cesium.Cartesian3.fromDegrees(main.pos.x, main.pos.y, height),
                 id: id,
