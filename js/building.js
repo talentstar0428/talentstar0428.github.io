@@ -149,7 +149,7 @@ var Building = function()
 
         getGroundHeight([positions], function(cartoPosition) {
             var ellipsoid = Cesium.Ellipsoid.WGS84;
-            var height = cartoPosition[0].height;
+            var height = Cesium.Math.toRadians(cartoPosition[0].height);
             var entity = new Cesium.Entity({
                 position : Cesium.Cartesian3.fromDegrees(main.pos.x, main.pos.y, height),
                 id: id,
@@ -195,7 +195,7 @@ var Building = function()
             dx1 = dx;
             dy1 = dy;
 
-            var position = Cesium.Cartesian3.fromDegrees(main.pos.x + dx1, main.pos.y + dy1, 3 * main.scale + height);
+            position = Cesium.Cartesian3.fromDegrees(main.pos.x + dx1, main.pos.y + dy1, 3 * main.scale + height);
             main.entrance_path_pos = position;
             main.entrance_path = new Cesium.Entity({
                 position: position,
@@ -219,7 +219,7 @@ var Building = function()
         var positions = new Cesium.Cartographic(Cesium.Math.toRadians(main.pos.x), Cesium.Math.toRadians(main.pos.y));
 
         getGroundHeight([positions], function(cartoPosition) {
-            var height = cartoPosition[0].height;
+            var height = Cesium.Math.toRadians(cartoPosition[0].height);
             var dx = main.img_end_positions_x[number] * main.scale;
             var dy = main.img_end_positions_y[number]* main.scale;
             var length = Math.sqrt(dx * dx + dy * dy);

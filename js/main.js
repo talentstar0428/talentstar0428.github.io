@@ -496,7 +496,7 @@ function showFlying(enable)
 }
 
 function getGroundHeight(positions, process) {
-    var promise = Cesium.sampleTerrain(viewer.terrainProvider, 3, positions);
+    var promise = Cesium.sampleTerrain(viewer.terrainProvider, 11, positions);
 
     Cesium.when(promise, function (cartoPosition) {
         process(cartoPosition);
