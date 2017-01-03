@@ -7,6 +7,7 @@
     <meta http-equiv='cache-control' content='no-cache'>
     <meta http-equiv='expires' content='0'>
     <meta http-equiv='pragma' content='no-cache'>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     
     <title>3D World</title>
     <script type="text/javascript" src="js/lib/jquery.min.js"></script>

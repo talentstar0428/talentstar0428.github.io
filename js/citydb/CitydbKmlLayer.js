@@ -265,7 +265,7 @@
 		var deferred = Cesium.when.defer();
 		var jsonUrl = that._url;
 		that._startLoadingEvent.raiseEvent(that);
-		Cesium.loadJsonp(jsonUrl).then(function(json) {
+		Cesium.loadJson(jsonUrl).then(function(json) {
         	that._jsonLayerInfo = json;	
         	that._layerType = json.displayform;
             that._cameraPosition = {
@@ -290,7 +290,7 @@
             
             var jsonUrl = that._cityobjectsJsonUrl;
             if (Cesium.defined(jsonUrl)) {
-            	Cesium.loadJsonp(jsonUrl).then(function(data) {
+            	Cesium.loadJson(jsonUrl).then(function(data) {
 					console.log(data);
 					deferred.resolve();
 					that._cityobjectsJsonData = data;
