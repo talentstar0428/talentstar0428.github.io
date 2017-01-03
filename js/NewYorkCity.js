@@ -40,7 +40,6 @@ var NewYorkCity = function() {
         isHome = false;
         isNewYork = true;
         isBaverlyHill = false;
-        showFlying(false);
 
         main.addLayer();
 
@@ -87,6 +86,7 @@ var NewYorkCity = function() {
         webMap.addLayer(main.buildingLayer);
 
         main.buildingLayer.registerEventHandler("FINISHLOADING", function(loadedcitydbLayer) {
+            showFlying(false);
             loadedcitydbLayer.zoomToStartPosition();
         });
     }
