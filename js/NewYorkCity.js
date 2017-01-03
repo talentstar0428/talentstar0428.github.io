@@ -35,35 +35,35 @@ var NewYorkCity = function() {
         showFlying(true);
 
         viewer.trackedEntity = main.center_Entity;
-        // main.center_Entity.show = false;
-        // baverlyHill.center_Entity.show = false;
-        // isHome = false;
-        // isNewYork = true;
-        // isBaverlyHill = false;
-        // showFlying(false);
+        main.center_Entity.show = false;
+        baverlyHill.center_Entity.show = false;
+        isHome = false;
+        isNewYork = true;
+        isBaverlyHill = false;
+        showFlying(false);
 
-        // main.addLayer();
+        main.addLayer();
 
-        viewer.camera.flyToBoundingSphere(
-            new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(main.city_pos.x, main.city_pos.y, 100.0), 200),
-            {
-            complete: function () {
-                main.center_Entity.show = false;
-                baverlyHill.center_Entity.show = false;
-                isHome = false;
-                isNewYork = true;
-                isBaverlyHill = false;
-                showFlying(false);
+        // viewer.camera.flyToBoundingSphere(
+        //     new Cesium.BoundingSphere(Cesium.Cartesian3.fromDegrees(main.city_pos.x, main.city_pos.y, 100.0), 200),
+        //     {
+        //     complete: function () {
+        //         main.center_Entity.show = false;
+        //         baverlyHill.center_Entity.show = false;
+        //         isHome = false;
+        //         isNewYork = true;
+        //         isBaverlyHill = false;
+        //         showFlying(false);
 
-                main.addLayer();
-            },
-            maximumHeight: 10000000,
-            orientation : {
-                heading: Cesium.Math.toRadians(-60),
-                pitch: Cesium.Math.toRadians(-25.0),
-                roll: 0.0
-            }
-        });
+        //         main.addLayer();
+        //     },
+        //     maximumHeight: 10000000,
+        //     orientation : {
+        //         heading: Cesium.Math.toRadians(-60),
+        //         pitch: Cesium.Math.toRadians(-25.0),
+        //         roll: 0.0
+        //     }
+        // });
     }
     main.addLayer = function() 
     {
