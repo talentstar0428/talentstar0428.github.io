@@ -12,7 +12,7 @@ var NewYorkCity = function() {
     main.buildingLayer      =   null;
     main.streetLayer        =   null;
 
-    main.prefixUrl          =   "//www.3dcitydb.net/3dcitydb/fileadmin/mydata/Cesium_NYC_Demo/";
+    main.prefixUrl          =   "http://www.3dcitydb.net/3dcitydb/fileadmin/mydata/Cesium_NYC_Demo/";
 
     main.init = function (position){
         main.city_pos       =   position;
