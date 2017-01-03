@@ -12,7 +12,7 @@ var NewYorkCity = function() {
     main.buildingLayer      =   null;
     main.streetLayer        =   null;
 
-    main.prefixUrl          =   "http://www.3dcitydb.net/3dcitydb/fileadmin/mydata/Cesium_NYC_Demo/";
+    main.prefixUrl          =   "//www.3dcitydb.net/3dcitydb/fileadmin/mydata/Cesium_NYC_Demo/";
 
     main.init = function (position){
         main.city_pos       =   position;
@@ -76,8 +76,8 @@ var NewYorkCity = function() {
     main.addBuildingLayer = function() 
     {
         main.buildingLayer = new CitydbKmlLayer({
-            // url : main.prefixUrl + "NYK_Building_Extruded/NYK_Building_Extruded_MasterJSON_NoJSONP.json",
-            url : "./data/Buildings/NYC_Manhattan_Buildings_extruded_MasterJSON.json",
+            url : main.prefixUrl + "NYK_Building_Extruded/NYK_Building_Extruded_MasterJSON_NoJSONP.json",
+            // url : "./data/Buildings/NYC_Manhattan_Buildings_extruded_MasterJSON.json",
             minLodPixels : 140,
             maxLodPixels : 1.7976931348623157e+308,
             maxSizeOfCachedTiles : 50,
@@ -94,8 +94,8 @@ var NewYorkCity = function() {
     main.addStreetLayer = function() 
     {
         main.streetLayer = new CitydbKmlLayer({
-            // url : main.prefixUrl + "NYK_Street_Footprint/NYK_Street_Footprint_MasterJSON_NoJSONP.json",
-            url : "./data/Streets/NYC_Manhattan_Streets_footprint_MasterJSON.json",
+            url : main.prefixUrl + "NYK_Street_Footprint/NYK_Street_Footprint_MasterJSON_NoJSONP.json",
+            //url : "./data/Streets/NYC_Manhattan_Streets_footprint_MasterJSON.json",
             minLodPixels : 140,
             maxLodPixels : 1.7976931348623157e+308,
             maxSizeOfCachedTiles : 50,
