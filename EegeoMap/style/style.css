@@ -12,15 +12,15 @@ body
 #logo
 {
 	position: absolute;
-	width: 370px;
-	z-index: 99;
+	width: 270px;
+	z-index: 1199;
 	top: 140px;
-	left: calc(50% - 185px);
+	left: calc(50% - 135px);
 }
 
 #freevi
 {
-	width: 350px;
+	width: 250px;
 	margin-right: 10px;
 	margin-left: 10px;
 	background: transparent;
